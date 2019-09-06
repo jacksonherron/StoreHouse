@@ -17,7 +17,6 @@ An application for homeowners to assess potential savings from installing a home
 
 Home and business owners in California that are interested in understanding the cost/benefits of installing clean tech on their property(ies).
 
-
 #### User Story
 
 1. (If not already logged in) Users arrive at the landing page, where they are directed to create an account or login. After creating the account they are logged into the system.
@@ -32,7 +31,6 @@ Home and business owners in California that are interested in understanding the 
 - Confirm submit
 
 4. User is presented with the results of cost savings/per month, as well as the simple payback period of the system.
-
 
 ---
 
@@ -53,3 +51,9 @@ Home and business owners in California that are interested in understanding the 
 ###### Savings Presentation
 
 ![Cost Savings Presentation](./assets/Cost_Tool_4.png)
+
+---
+
+## Entity Relationship Diagram
+
+![Entity Relationship Diagram](./assets/ERD.png)
