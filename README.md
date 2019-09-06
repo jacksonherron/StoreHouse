@@ -14,7 +14,7 @@ A full stack application for homeowners to assess potential savings from install
 
 ---
 
-## Target User
+## User Description
 
 Home and business owners in California that are interested in understanding the cost/benefits of installing clean tech on their property(ies).
 
