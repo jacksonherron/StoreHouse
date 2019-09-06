@@ -1,6 +1,6 @@
 # StoreHouse
 
-An application for homeowners to assess potential savings from installing a home solar and battery system. Created using Genability's Switch API.
+An application for homeowners to assess potential savings from installing a home solar and battery system. My Capstone project for General Assembly's Software Engineering Immersive, June-September 2019.
 
 ## Technologies Used
 
