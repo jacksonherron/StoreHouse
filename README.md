@@ -9,7 +9,8 @@ An application for homeowners to assess potential savings from installing a home
 - Postgres
 - React
 - Bootstrap
-- Genability Switch
+- OSESMO https://github.com/RyanCMann/OSESMO
+- Genability Switch https://www.genability.com/switch/
 
 ---
 
