@@ -62,3 +62,6 @@ User proceeds through the onboarding process:
 
 ![Cost Savings Presentation](./assets/Cost_Tool_4.png)
 
+
+
+&copy; Jackson Herron, 2019
