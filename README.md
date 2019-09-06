@@ -38,11 +38,11 @@ Home and business owners in California that are interested in understanding the 
 
 ## Wireframes
 
-##### Landing
+#### Landing
 
 ![Landing Page](./assets/Landing.png)
 
-##### Onboarding
+#### Onboarding
 
 ![Cost Walkthrough 1/3](./assets/Cost_Tool_1.png)
 
@@ -50,6 +50,6 @@ Home and business owners in California that are interested in understanding the 
 
 ![Cost Walkthrough 3/3](./assets/Cost_Tool_3.png)
 
-##### Savings Presentation
+#### Savings Presentation
 
 ![Cost Savings Presentation](./assets/Cost_Tool_4.png)
