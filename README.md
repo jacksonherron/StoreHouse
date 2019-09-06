@@ -13,6 +13,12 @@ A full stack application for homeowners to assess potential savings from install
 
 ---
 
+## Entity Relationship Diagram
+
+![Entity Relationship Diagram](./assets/ERD.png)
+
+---
+
 ## Target User
 
 Home and business owners in California that are interested in understanding the cost/benefits of installing clean tech on their property(ies).
@@ -55,8 +61,3 @@ User proceeds through the onboarding process:
 
 ![Cost Savings Presentation](./assets/Cost_Tool_4.png)
 
----
-
-## Entity Relationship Diagram
-
-![Entity Relationship Diagram](./assets/ERD.png)
