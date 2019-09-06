@@ -11,11 +11,6 @@ A full stack application for homeowners to assess potential savings from install
 - OSESMO https://github.com/RyanCMann/OSESMO
 - Genability Switch https://www.genability.com/switch/
 
----
-
-## Entity Relationship Diagram
-
-![Entity Relationship Diagram](./assets/ERD.png)
 
 ---
 
@@ -40,6 +35,12 @@ User proceeds through the onboarding process:
 - Confirm submit
 
 4. User is presented with the results of cost savings/per month, as well as the simple payback period of the system.
+
+---
+
+## Entity Relationship Diagram
+
+![Entity Relationship Diagram](./assets/ERD.png)
 
 ---
 
