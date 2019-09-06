@@ -8,7 +8,6 @@ A full stack application for homeowners to assess potential savings from install
 - Flask
 - Postgres
 - React
-- Bootstrap
 - OSESMO https://github.com/RyanCMann/OSESMO
 - Genability Switch https://www.genability.com/switch/
 
