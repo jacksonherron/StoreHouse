@@ -20,14 +20,16 @@ Home and business owners in California that are interested in understanding the 
 
 ## User Story
 
-1. (If not already logged in) Users arrive at the landing page, where they are directed to create an account or login. After creating the account they are logged into the system.
-2. Users are prompted to begin specifying their home solar + storage system.
-3. User proceeds through the onboarding process:
+1. (If not already logged in) Users arrive at the landing page, where they are directed to create an account or login. After creating an account they are directly logged into the system.
+2. From the logged in page users can view their previously quoted properties or proceed to add a new property.
+3. Click on a property brings up it's view in a modal, with more detail.
+User proceeds through the onboarding process:
+4. When a user clicks to add a new property, they are walked through the onboarding process:
 
 - Enter their address
 - Confirm utility and tariff status, or select from a list
 - Enter last 3 months electricity bills
-- Select sizing + configuration of home solar system
+- Select solar system
 - Select storage system
 - Confirm submit
 
