@@ -64,4 +64,4 @@ User proceeds through the onboarding process:
 
 
 
-&copy; Jackson Herron, 2019
+&copy; Jackson Herron 2019
