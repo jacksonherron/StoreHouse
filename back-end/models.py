@@ -1,11 +1,12 @@
 from app import db, marshmallow
 from flask import jsonify
 from datetime import datetime
+from flask_login import UserMixin
 
 
 ##################### USER MODEL #####################
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __table_args__  = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
@@ -14,6 +15,9 @@ class User(db.Model):
     email = db.Column(db.String(200), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
     properties = db.relationship('Property', backref='user', lazy=True)
+    # is_authenticated = db.Column(db.Booloean, nullable = False, default=True)
+    # is_active = db.Column(db.Booloean, nullable = False, default=True)
+    # is_anonymous = db.Column(db.Booloean, nullable = False, default=False)
 
     def __init__(self, first_name, last_name, email, password):
         self.first_name = first_name
@@ -21,9 +25,10 @@ class User(db.Model):
         self.email = email
         self.password = password
 
-    # def __repr__(self):
-    #     return '<User %r %r>' % self.first_name self.last_name
-    
+    # @classmethod
+    # def get_id(cls, id)
+    #     return chr(id)
+
     @classmethod
     def create_user(cls, first_name, last_name, email, password):
         new_user = User(first_name, last_name, email, password)
@@ -49,6 +54,8 @@ class UserSchema(marshmallow.Schema):
     class Meta:
         fields = ('id', 'first_name', 'last_name', 'email', 'password')
 
+user_email_table = {u.email: u for u in users}
+userid_table = {u.id: u for u in users}
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
 
