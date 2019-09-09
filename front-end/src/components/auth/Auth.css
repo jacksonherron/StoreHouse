@@ -1,0 +1,44 @@
+.modalOpen {
+    background-color: #61BCF9!important;
+    border-color: #61BCF9!important;
+    margin: 0.5rem;
+}
+
+.modalOpen:hover {
+    background-color: rgb(83, 162, 214)!important;
+    border-color: rgb(83, 162, 214)!important;
+}
+
+.modal {
+    display: flex!important;
+    justify-content: center!important;
+    align-items: center!important;
+}
+
+.modal-content {
+    min-width: 60vw;
+    min-height: 40vh;
+}
+
+.modal-footer {
+    justify-content: center;
+}
+
+.close-button {
+    background-color: rgba(0, 0, 0, 0.5)!important;
+    border-color: rgba(0, 0, 0, 0.5)!important;
+}
+
+.close-button:hover {
+    background-color: rgba(0, 0, 0, 0.7)!important;
+    border-color: rgba(0, 0, 0, 0.7)!important;
+}
+
+.submit {
+    background-color: #61BCF9!important;
+    border-color: #61BCF9!important;
+}
+.submit:hover {
+    background-color: rgb(83, 162, 214)!important;
+    border-color: rgb(83, 162, 214)!important;
+}

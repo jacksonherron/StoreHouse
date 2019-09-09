@@ -1,0 +1,9 @@
+.navbar-collapse {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.navbar-nav {
+    margin-right: 0!important;
+}

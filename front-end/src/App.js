@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import Navigation from './components/Navigation/Navigation'
+import Routes from './config/routes'
+import Footer from './components/Footer/Footer'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends Component {
+  state = {
+    showLogin: false,
+    showSignup: false
+  }
+
+  handleShowLogin = () => {
+    if (this.state.showLogin === false){
+      return this.setState({ showLogin: true })
+    } else {
+      return this.setState({ showLogin: false })
+    }
+  }
+
+  handleShowSignup = () => {
+    if (this.state.showSignup === false){
+      return this.setState({ showSignup: true })
+    } else {
+      return this.setState({ showSignup: false })
+    }
+  }
+
+  render() {
+    return (
+      <>
+        <Navigation handleShowLogin={this.handleShowLogin} handleShowSignup={this.handleShowSignup} />
+        <Routes handleShowLogin={this.handleShowLogin} handleShowSignup={this.handleShowSignup} showLogin={this.state.showLogin} showSignup={this.state.showSignup} />
+        <Footer />
+      </>
+    );
+  }
 }
 
 export default App;
