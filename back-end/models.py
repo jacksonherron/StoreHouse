@@ -2,13 +2,16 @@ from app import db, marshmallow
 from flask import jsonify
 from datetime import datetime
 
+
+##################### USER MODEL #####################
+
 class User(db.Model):
     __table_args__  = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(100), nullable=False)
     last_name  = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(200, unique=True, nullable=False))
+    email = db.Column(db.String(200), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
     properties = db.relationship('Property', backref='user', lazy=True)
 
@@ -18,12 +21,12 @@ class User(db.Model):
         self.email = email
         self.password = password
 
-    def __repr__(self):
-        return '<User %r %r>' % self.first_name self.last_name
+    # def __repr__(self):
+    #     return '<User %r %r>' % self.first_name self.last_name
     
     @classmethod
-    def create_user(cls, name, first_name, last_name, email, password):
-        new_user = User(name, first_name, last_name, email, password)
+    def create_user(cls, first_name, last_name, email, password):
+        new_user = User(first_name, last_name, email, password)
         try:
             db.session.add(new_user)
             db.session.commit()
@@ -49,6 +52,9 @@ class UserSchema(marshmallow.Schema):
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
 
+
+
+##################### POSTS MODEL #####################
 
 class Property(db.Model):
     __table_args__  = {'extend_existing': True}
@@ -82,7 +88,7 @@ class Property(db.Model):
 
     @classmethod
     def create_property(cls, property_name, address_line_1, address_line_2, address_line_3, utility, tariff, solar_system, battery_system, monthly_savings, payback_period, user_id):
-        new_property = Property(title, property_name, address_line_1, address_line_2, address_line_3, utility, tariff, solar_system, battery_system, monthly_savings, payback_period, user_id)
+        new_property = Property(property_name, address_line_1, address_line_2, address_line_3, utility, tariff, solar_system, battery_system, monthly_savings, payback_period, user_id)
         try:
             db.session.add(new_property)
             db.session.commit()

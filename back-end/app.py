@@ -25,7 +25,7 @@ PORT = 8000
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!'
+    return 'Welcome to StoreHouse DB'
 
 @app.route('/user', methods=['POST', 'GET'])
 @app.route('/user/<user_id>', methods=['GET'])
@@ -38,7 +38,7 @@ def get_or_create_user(user_id=None):
         last_name = request.json['last_name']
         email = request.json['email']
         password = request.json['password']
-        return User.create_User(first_name, last_name, email, password)
+        return User.create_user(first_name, last_name, email, password)
     else:
         return User.get_user(user_id)
     
