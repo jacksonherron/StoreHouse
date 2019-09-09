@@ -32,5 +32,30 @@ h1 {
 
 .slogan {
     text-align: center;
+    font-size: 1.3rem;
+    margin: 1rem auto;
     color: rgba(0, 0, 0, 0.5)
+}
+
+
+@media only screen and (max-width: 600px) {
+    h1 {
+        font-size: 3rem
+    }
+
+    .fa-home {
+        font-size: 3rem;
+        margin: 1.5rem 0.2rem 0.5rem 1rem;
+    }
+    
+    .fa-sun {
+        color: #FFE556;
+        font-size: 1.7rem;
+        align-self: flex-start;
+    }
+
+    .slogan {
+        font-size: 1rem;
+    }
+    
 }

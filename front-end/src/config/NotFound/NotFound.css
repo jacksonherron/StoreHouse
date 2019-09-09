@@ -1,0 +1,24 @@
+.not-found {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 2;
+}
+
+.not-found h1 {
+    padding-bottom: 2rem;
+    font-size: 2rem;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.go-back {
+        background-color: #61BCF9!important;
+        border-color: #61BCF9!important;
+        margin: 0.5rem;
+}
+
+.go-back:hover {
+    background-color: rgb(83, 162, 214)!important;
+    border-color: rgb(83, 162, 214)!important;
+}

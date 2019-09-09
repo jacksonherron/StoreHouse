@@ -1,7 +1,8 @@
 import React from 'react';
 import './Navigation.css';
-import Navbar from 'react-bootstrap/Navbar'
-import Nav from 'react-bootstrap/Nav'
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
+import { Link } from 'react-router-dom';
 
 const Navigation = ({ handleShowLogin, handleShowSignup }) => {
     return (
@@ -9,8 +10,8 @@ const Navigation = ({ handleShowLogin, handleShowSignup }) => {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                    <Nav.Link onClick={handleShowLogin}>Log In</Nav.Link>
-                    <Nav.Link onClick={handleShowSignup}>Sign Up</Nav.Link>
+                    <Link to="/" className="navLink">About</Link>
+                    <Link to="/home" className="navLink">Home</Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>

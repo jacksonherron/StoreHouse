@@ -1,0 +1,81 @@
+.homePage {
+    align-self: flex-start;
+    padding: 5rem 7rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex-grow: 2;
+}
+ 
+.properties {
+    margin-top: 5rem
+}
+
+.newProperty {
+    margin-top: 7rem;
+}
+
+.welcome h1 {
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 2rem;
+}
+
+.username {
+    color: #61BCF9;
+    font-size: 2.6rem;
+    padding-left: 0.5rem;
+}
+
+.properties h2 {
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 1.5rem;
+}
+
+.newProperty h2 {
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 1.5rem;
+}
+
+.begin {
+    background-color: #61BCF9!important;
+    border-color: #61BCF9!important;
+    margin: 0.5rem;
+}
+
+.begin:hover {
+    background-color: rgb(83, 162, 214)!important;
+    border-color: rgb(83, 162, 214)!important;
+}
+
+@media only screen and (max-width: 600px) {
+    .homePage {
+        padding: 4rem 2rem;
+    }
+
+    .welcome h1 {
+        color: rgba(0, 0, 0, 0.7);
+        font-size: 1.5rem;
+    }
+
+
+    .username {
+        font-size: 2rem;
+    }
+
+    .properties {
+        margin-top: 3rem;
+        font-size: 1rem;
+    }
+
+    .properties h2 {
+        font-size: 1.2rem;
+    }
+    
+    .newProperty {
+        margin-top: 5rem;
+    }
+
+    .newProperty h2 {
+        font-size: 1.2rem;
+    }
+}

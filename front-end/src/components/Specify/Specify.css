@@ -1,0 +1,12 @@
+.specify {
+    height: 100%;
+    flex-grow: 2;
+    padding: 5rem;
+}
+
+
+@media only screen and (max-width: 600px) {
+    .specify {
+        padding: 2rem;
+    }
+}

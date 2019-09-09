@@ -7,3 +7,14 @@
 .navbar-nav {
     margin-right: 0!important;
 }
+
+.navbar-nav * {
+    font-size: 1.4rem;
+    color: rgba(0, 0, 0, 0.7)!important;
+    padding: 0 0.3rem;
+}
+
+.navLink:hover{
+    text-decoration: none;
+    color: #61BCF9!important;
+}

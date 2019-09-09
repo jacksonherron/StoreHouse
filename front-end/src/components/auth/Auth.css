@@ -20,6 +20,14 @@
     min-height: 40vh;
 }
 
+.modal-dialog {
+    max-width: 95vw;
+}
+
+.modal-tile {
+    font-size: 2rem;
+}
+
 .modal-footer {
     justify-content: center;
 }
@@ -41,4 +49,11 @@
 .submit:hover {
     background-color: rgb(83, 162, 214)!important;
     border-color: rgb(83, 162, 214)!important;
+}
+
+@media only screen and (max-width: 600px) {
+    .modal-content {
+        min-width: 95vw;
+    }
+    
 }
