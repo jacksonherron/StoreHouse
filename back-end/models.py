@@ -2,92 +2,112 @@ from app import db, marshmallow
 from flask import jsonify
 from datetime import datetime
 
-# Subredit model
-class Sub(db.Model):
+class User(db.Model):
     __table_args__  = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True, nullable=False)
-    description = db.Column(db.String(300), nullable=False)
-    # posts = db.relationship('Post', backref='sub', lazy=True)
+    first_name = db.Column(db.String(100), nullable=False)
+    last_name  = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(200, unique=True, nullable=False))
+    password = db.Column(db.String(100), nullable=False)
+    properties = db.relationship('Property', backref='user', lazy=True)
 
-    def __init__(self, name, description):
-        self.name = name
-        self.description = description
+    def __init__(self, first_name, last_name, email, password):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.email = email
+        self.password = password
+
+    def __repr__(self):
+        return '<User %r %r>' % self.first_name self.last_name
     
     @classmethod
-    def create_sub(cls, name, description):
-        new_sub = Sub(name, description)
+    def create_user(cls, name, first_name, last_name, email, password):
+        new_user = User(name, first_name, last_name, email, password)
         try:
-            db.session.add(new_sub)
+            db.session.add(new_user)
             db.session.commit()
         except:
             db.session.rollback()
             raise
-        return sub_schema.jsonify(new_sub)
+        return user_schema.jsonify(new_user)
     
     @classmethod
-    def get_subs(cls):
-        subs = Sub.query.all()
-        return subs_schema.jsonify(subs)
+    def get_users(cls):
+        users = User.query.all()
+        return users_schema.jsonify(users)
 
     @classmethod
-    def get_sub(cls, sub_id):
-        sub = Sub.query.get(sub_id)
-        return sub_schema.jsonify(sub)
+    def get_user(cls, user_id):
+        user = User.query.get(user_id)
+        return user_schema.jsonify(user)
 
-class SubSchema(marshmallow.Schema):
+class UserSchema(marshmallow.Schema):
     class Meta:
-        fields = ('id', 'name', 'description')
+        fields = ('id', 'first_name', 'last_name', 'email', 'password')
 
-sub_schema = SubSchema()
-subs_schema = SubSchema(many=True)
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
 
 
-# Post Model Start
-# id timestamp title text
-class Post(db.Model):
+class Property(db.Model):
     __table_args__  = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
+    property_name = db.Column(db.String(300), nullable=False)
+    address_line_1 = db.Column(db.String(300), nullable=False)
+    address_line_2 = db.Column(db.String(300), nullable=False)
+    address_line_3 = db.Column(db.String(300), nullable=False)
+    utility = db.Column(db.String(300), nullable=False)
+    tariff = db.Column(db.String(300), nullable=False)
+    solar_system = db.Column(db.String(300), nullable=False)
+    battery_system = db.Column(db.String(300), nullable=False)
+    monthly_savings = db.Column(db.Float, nullable=False)
+    payback_period = db.Column(db.Float, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    title = db.Column(db.String(100), nullable=False)
-    text = db.Column(db.String(300), nullable=False)
-    sub = db.Column(db.Integer, db.ForeignKey('sub.id'), nullable=False)
 
-    def __init__(self, title, text, sub):
-        self.title = title
-        self.text = text
-        self.sub = sub
+    def __init__(self, property_name, address_line_1, address_line_2, address_line_3, utility, tariff, solar_system, battery_system, monthly_savings, payback_period, user_id):
+        self.property_name = property_name
+        self.address_line_1 = address_line_1
+        self.address_line_2 = address_line_2
+        self.address_line_3 = address_line_3
+        self.utility = utility
+        self.tariff = tariff
+        self.solar_system = solar_system
+        self.battery_system = battery_system
+        self.monthly_savings = monthly_savings
+        self.payback_period = payback_period
+        self.user_id = user_id
 
     @classmethod
-    def create_post(cls, title, text, sub):
-        new_post = Post(title, text, sub)
+    def create_property(cls, property_name, address_line_1, address_line_2, address_line_3, utility, tariff, solar_system, battery_system, monthly_savings, payback_period, user_id):
+        new_property = Property(title, property_name, address_line_1, address_line_2, address_line_3, utility, tariff, solar_system, battery_system, monthly_savings, payback_period, user_id)
         try:
-            db.session.add(new_post)
+            db.session.add(new_property)
             db.session.commit()
         except:
             db.session.rollback()
             raise
-        return post_schema.jsonify(new_post)
+        return property_schema.jsonify(new_property)
     
     @classmethod
-    def get_posts(cls):
-        posts = Post.query.all()
-        return posts_schema.jsonify(posts)
+    def get_properties(cls):
+        found_properties = Property.query.all()
+        return properties_schema.jsonify(found_properties)
 
     @classmethod
-    def get_post(cls, post_id):
-        sub = Sub.query.get(post_id)
-        return post_schema.jsonify(post)
+    def get_property(cls, property_id):
+        found_property = Property.query.get(property_id)
+        return property_schema.jsonify(found_property)
 
 
-class PostSchema(marshmallow.Schema):
+class PropertySchema(marshmallow.Schema):
     class Meta:
-        fields = ('id', 'timestamp', 'title', 'text', 'sub')
+        fields = ('property_name', 'address_line_1', 'address_line_2', 'address_line_3', 'utility', 'tariff', 'solar_system', 'battery_system', 'monthly_savings', 'payback_period', 'user_id', 'timestamp')
 
-post_schema = PostSchema()
-posts_schema = PostSchema(many=True)
+property_schema = PropertySchema()
+properties_schema = PropertySchema(many=True)
 
 ## Create DB
 if __name__ == 'models':
