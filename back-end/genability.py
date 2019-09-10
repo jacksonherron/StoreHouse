@@ -32,12 +32,16 @@ class GenabilityApiInterface():
         elif rest_verb == 'PUT':
             headers = {"Content-Type": "application/json"}
             api_response: requests.Response = requests.put(url_string, data=json.dumps(data), headers=headers, auth=auth_tuple)
+        elif rest_verb == 'POST':
+            headers = {"Content-Type": "application/json"}
+            api_response: requests.Response = requests.post(url_string, data=json.dumps(data), headers=headers, auth=auth_tuple)
         elif rest_verb == 'DELETE':
             api_response: requests.Response = requests.delete(url_string, auth=auth_tuple)
         else:
             raise Exception(f"Unsupported verb {verb}")
 
         return api_response.json()
+        # return json.dumps(api_response.json(), indent=4)
 
 
     # Creates a customer property account in Genability database
@@ -77,13 +81,13 @@ class GenabilityApiInterface():
         }
 
         api_response = self.send_api_request(endpoint_url=endpoint_url, rest_verb='PUT', data=api_body)
-        return api_response
+        return json.dumps(api_response, indent=4)
 
 
     # Retrieves the account with providerAccoutnId from the Genability Database
     def get_account(self, providerAccountId):
         api_response = self.send_api_request(endpoint_url=f'v1/accounts/pid/{providerAccountId}', rest_verb='GET')
-        return api_response
+        return json.dumps(api_response, indent=4)
 
 
     # Retrieves utilities connected to the associated zipcode
@@ -91,7 +95,7 @@ class GenabilityApiInterface():
         utility_endpoint_url = f'/public/lses?postCode={zipcode}&country=US&residentialServiceTypes=ELECTRICITY&sortOn=totalCustomers&sortOrder=DESC'
 
         api_response = self.send_api_request(endpoint_url=utility_endpoint_url, rest_verb='GET')
-        return api_response
+        return json.dumps(api_response, indent=4)
 
 
     # Sets the customers account utility with 100% accuracy
@@ -104,7 +108,7 @@ class GenabilityApiInterface():
         }
 
         api_response = self.send_api_request(endpoint_url=endpoint_url, rest_verb="PUT", data=api_body)
-        return api_response
+        return json.dumps(api_response, indent=4)
 
 
     # Retrieves tariffs connected to the customer's account
@@ -114,11 +118,13 @@ class GenabilityApiInterface():
         count = api_response["count"]
         options = api_response["results"]
         if count == 1:
-            return options
+            return json.dumps(options, indent=4)
         elif count == 2:
-            return options[0:2]
+            return json.dumps(options[0:2], indent=4)
         elif count > 2:
-            return options[0:3]
+            return json.dumps(options[0:3], indent=4)
+        else:
+            return {"status": "400", "message": "Something went wrong, please try again."}
 
     # Sets the customers account tariff with 100% accuracy
     def set_tariff(self, providerAccountId, masterTariffId):
@@ -130,7 +136,7 @@ class GenabilityApiInterface():
         }
 
         api_response = self.send_api_request(endpoint_url=endpoint_url, rest_verb="PUT", data=api_body)
-        return api_response
+        return json.dumps(api_response, indent=4)
 
     # Sets the customers account utility with 100% accuracy
     def update_account(self, providerAccountId, keyName, dataValue):
@@ -141,14 +147,14 @@ class GenabilityApiInterface():
         }
 
         api_response = self.send_api_request(endpoint_url=endpoint_url, rest_verb="PUT", data=api_body)
-        return api_response
+        return json.dumps(api_response, indent=4)
         
 
     # Deletes the customers account from genability database. Note this requires Genability's account, instead of the providerAccountId
     def delete_account(self, accountId):
         endpoint_url = f'/v1/accounts/{accountId}'
         api_response = self.send_api_request(endpoint_url=endpoint_url, rest_verb="DELETE")
-        return api_response
+        return json.dumps(api_response, indent=4)
 
     # Creates a custom electricity profile from their last three bill statements. Note bills are provided as the number kWh of electricity used (as a string)
     def create_electricity_profile(self, providerAccountId, bill_1: str, bill_2: str, bill_3: str):
@@ -180,7 +186,7 @@ class GenabilityApiInterface():
             ]
         }
         api_response = self.send_api_request(endpoint_url=endpoint_url, rest_verb="PUT", data=api_body)
-        return api_response
+        return json.dumps(api_response, indent=4)
 
 
      # Creates a solar energy production profile given input data. Direction is either EAST, SOUTH, or WEST. Size is the kW capacity of the system, represented as a string.
@@ -195,7 +201,7 @@ class GenabilityApiInterface():
         api_body = {
             "providerAccountId" : providerAccountId,
             "providerProfileId" : f'{providerAccountId}-pvwatts',
-            "groupBy" : "YEAR",
+            "groupBy" : "HOUR",
             "serviceTypes" : "SOLAR_PV",
             "source": {
                 "sourceId":"PVWatts",
@@ -224,11 +230,65 @@ class GenabilityApiInterface():
                 }
             }
         }
-
         api_response = self.send_api_request(endpoint_url=endpoint_url, rest_verb="PUT", data=api_body)
-        return api_response
+        return json.dumps(api_response, indent=4)
 
 
+    # Calculates baseline annual cost of electricity without solar or storage
+    def calculate_baseline_costs(self, providerAccountId):
+        endpoint_url = f'/v1/accounts/pid/{providerAccountId}/calculate/'
+        api_body = { 
+            "fromDateTime": "2019-09-01T00:00:00", 
+            "toDateTime": "2020-09-31T00:00:00", 
+            "useIntelligentBaselining": "true", 
+            "includeDefaultProfile": "true",
+            "autoBaseline": "true", 
+            "minimums": "false", 
+            "detailLevel": "CHARGE_TYPE", 
+            "groupBy": "Hour", 
+            "fields": "EXT"
+        }
+        api_response = self.send_api_request(endpoint_url=endpoint_url, rest_verb="POST", data=api_body)
+        return json.dumps(api_response, indent=4)
+
+
+    # Retrieves the net hourly profile of electricity consumption minus production from solar, and calculates yearly savings
+    def retrieve_net_hourly_profile(self, providerAccountId, solarProfileId):
+        endpoint_url = f'/v1/accounts/pid/{providerAccountId}/calculate/'
+        api_body = {       
+            "fromDateTime": "2019-09-01T00:00:00", 
+            "toDateTime": "2020-08-31T00:00:00", 
+            "useIntelligentBaselining": "true", 
+            "includeDefaultProfile": "true",
+            "autoBaseline": "true", 
+            "minimums": "false", 
+            "detailLevel": "CHARGE_TYPE_AND_TOU", 
+            "groupBy": "HOUR", 
+            "fields": "EXT",
+            "tariffInputs": [{
+                "keyName": "profileId",
+                "dataValue": solarProfileId,
+                "operator": "-"
+            }]
+        }
+        api_response = self.send_api_request(endpoint_url=endpoint_url, rest_verb="POST", data=api_body)
+        return json.dumps(api_response, indent=4)
+
+
+    # Retrieves hourly electricity consumption/production from a previously create profile 
+    def get_profile(self, profile_id):
+        endpoint_url = f"profiles/pid/{profile_id}/?populateIntervals=true&groupBy=HOUR"
+        api_body = {
+            "fromDateTime": "2019-09-01T00:00:00", 
+            "toDateTime": "2020-08-31T00:00:00", 
+            "useIntelligentBaselining": "true",
+            "populateReadings": "true",
+            "autoBaseline": "true",
+            "detailLevel": "CHARGE_TYPE_AND_TOU",
+            "fields": "EXT",
+        }
+        api_response = self.send_api_request(endpoint_url, 'GET', api_body)
+        return json.dumps(api_response, indent=4)
 
 ######### TESTING ########
 
@@ -247,33 +307,46 @@ GenabilityInterface = GenabilityApiInterface(app_id=auth["app_id"], app_key=auth
 
 # Residential Account
 providerAccountId = "4e6d4f43-a94f-478c-8201-12532c653b01"
+electricityProfileId = "4e6d4f43-a94f-478c-8201-12532c653b01-bills"
+solarProfileId = "5d7722728161887448ff265d"
 # Commercial Account 
 # providerAccountId = "3204f99c-a8e7-49b9-9658-9fcdd22d0893"
 
-
-# TEST GET_ACCOUNT PASSED
+# TEST GET_ACCOUNT - PASSED
 # print(GenabilityInterface.get_account(providerAccountId=providerAccountId))
 
-# TEST GET_UTILITIES PASSED
+# TEST GET_UTILITIES - PASSED
 # print(GenabilityInterface.get_utilities(zipcode="94103"))
 
-# TEST SET_UTILITY PASSED
+# TEST SET_UTILITY - PASSED
 # print(GenabilityInterface.set_utility(providerAccountId=providerAccountId, lseId=734))
 
-# TEST GET_TARIFFS PASSED
+# TEST GET_TARIFFS - PASSED
 # print(GenabilityInterface.get_tariffs(providerAccountId=providerAccountId))
 
-# TEST SET_TARIFF
+# TEST SET_TARIFF - PASSED
 # print(GenabilityInterface.set_tariff(providerAccountId=providerAccountId, masterTariffId=82009))
 
-# TEST UPDATE_ACCOUNT PASSED
+# TEST UPDATE_ACCOUNT - PASSED
 # print(GenabilityInterface.update_account(providerAccountId, keyName="customerClass", dataValue="1"))
 
-#  TEST DELETE_ACCOUNT PASSED
+#  TEST DELETE_ACCOUNT - PASSED
 # print(GenabilityInterface.delete_account(accountId))
 
-# TEST CREATE_ELECTRICITY_PROFILE
-# print(GenabilityInterface.create_electricity_profile(providerAccountId=providerAccountId, bill_1="597", bill_2="521", bill_3="572"))
+# TEST CREATE_ELECTRICITY_PROFILE - PASSED
+# print(GenabilityInterface.create_electricity_profile(providerAccountId=providerAccountId, bill_1="810", bill_2="900", bill_3="780"))
 
-# Test CREATE_SOLAR_PROFILE
-print(GenabilityInterface.create_solar_profile(providerAccountId=providerAccountId, direction="SOUTH", system_size="12"))
+# Test CREATE_SOLAR_PROFILE - PASSED
+# print(GenabilityInterface.create_solar_profile(providerAccountId=providerAccountId, direction="SOUTH", system_size="3"))
+
+# Test CALCULATE_BASELINE_COSTS - PASSED
+# print(GenabilityInterface.calculate_baseline_costs(providerAccountId=providerAccountId))
+
+# Test RETRIEVE_NET_HOURLY_PROFILE - PASSED
+print(GenabilityInterface.retrieve_net_hourly_profile(providerAccountId=providerAccountId, solarProfileId=solarProfileId))
+
+# Test GET_PROFILE
+# print(GenabilityInterface.get_profile(profile_id=electricityProfileId))
+
+# Test RETRIEVE_HOURLY_SOLAR
+# print(GenabilityInterface.retrieve_hourly_solar(providerAccountId=providerAccountId))
