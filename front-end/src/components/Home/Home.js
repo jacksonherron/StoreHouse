@@ -18,7 +18,7 @@ class Home extends Component {
                     <h2>Your Properties</h2>
                 </div>
                 <div className="newProperty">
-                    <h2>Add a property</h2>
+                    <h2>Add a Property</h2>
                     <p>This process will walkthrough specifying a new solar and storage system for one of your properties. It shouldn't take any longer than 10 minutes to complete.</p>
                     <Link to='/specify' ><Button className="begin" onClick={this.handleSubmit}>Begin</Button></Link>
                 </div>
