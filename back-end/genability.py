@@ -97,3 +97,14 @@ class GenabilityApiInterface:
         
 
 API = GenabilityApiInterface(auth.app_id, auth.app_key)
+API.create_account(
+    account_name="My Test Account",
+    address1="1222 Harrison St",
+    address2="Apt 6611",
+    city="San Francisco",
+    zip="94103",
+    country="US"
+
+    
+    
+    )
