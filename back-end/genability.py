@@ -90,7 +90,19 @@ class GenabilityApiInterface():
 
     def get_utilities(self, zipcode):
         utility_endpoint_url = f'/public/lses?postCode={zipcode}&country=US&residentialServiceTypes=ELECTRICITY&sortOn=totalCustomers&sortOrder=DESC'
+
         api_response = self.send_api_request(endpoint_url=utility_endpoint_url, rest_verb='GET')
+        return api_response
+
+    def set_utility(self, providerAccountId, lseId):
+        endpoint_url = f'/v1/accounts/pid/{providerAccountId}/properties'
+        api_body = {
+            "keyName": "lseId",
+            "dataValue": lseId,
+            "accuracy": 100
+        }
+
+        api_response = self.send_api_request(endpoint_url=endpoint_url, rest_verb="PUT", data=api_body)
         return api_response
 
     # def get_tariffs(self, zipcode):
@@ -123,15 +135,19 @@ GenabilityInterface = GenabilityApiInterface(app_id=auth["app_id"], app_key=auth
 #         country="US",
 #         customer_class="residential"
 #     ))
-
+providerAccountId = "4e6d4f43-a94f-478c-8201-12532c653b01"
 
 # Test get_account PASSED
-providerAccountId = "4e6d4f43-a94f-478c-8201-12532c653b01"
 print(GenabilityInterface.get_account(providerAccountId=providerAccountId))
 
-
 # Test get_utilities PASSED
-print(GenabilityInterface.get_utilities(zipcode="94103"))
+# print(GenabilityInterface.get_utilities(zipcode="94103"))
+
+# Test set_utility PASSED
+# print(GenabilityInterface.set_utility(providerAccountId=providerAccountId, lseId=734))
+
+# Test get_tariffs 
+
 
 
 
