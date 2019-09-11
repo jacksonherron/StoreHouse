@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom'
 import axios from 'axios';
 import './Auth.css';
 import API_URL from '../../constants';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import Alert from 'react-bootstrap/Alert';
 
 class Signup extends Component {
   state = {
@@ -11,7 +13,7 @@ class Signup extends Component {
     last_name: '',
     email: '',
     password: '',
-    password2: '',
+    errors: []
   }
 
 
@@ -30,19 +32,15 @@ class Signup extends Component {
     }
 
     axios.post(`${API_URL}/register`, new_user)
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
+      .then(res => {
+        this.props.handleShowSignup()
+        this.props.setCurrentUser(res.data.id, res.data.first_name, res.data.last_name);
+        this.props.history.push('/home');
+      })
+      .catch(err => {
+        this.setState({ errors: err.response.data.errors })
+      });
 
-    this.props.handleShowSignup()
-
-      // axios.post(`${API_URL}/auth/register`, newUser)
-      //     .then(res => {
-      //         this.clearModal();
-      //         this.props.history.push('/');
-      //     })     
-      //     .catch(err => {
-      //         this.setState({ errors: err.response.data.errors });
-      //     });
   };
 
   render() {
@@ -57,13 +55,19 @@ class Signup extends Component {
             <Modal.Title>Sign Up</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {this.state.errors && this.state.errors.map((e, i) => (
-                <div className="alert alert-danger alert-dismissible fade show" style={{width: '100%'}} role="alert" key={i}>
-                    {e.message}
-                    <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+            {this.state.errors && this.state.errors.map((error, i) => (
+              <Alert 
+                className="alert"
+                key={i}
+                variant={"danger"}
+                onClose={() => {
+                  let errors = this.state.errors;
+                  errors.splice(i);
+                  this.setState({ errors: errors })
+                }}
+                dismissible>
+                {error}
+              </Alert>
             ))}
             <form>
               <div className="form-group">
@@ -82,10 +86,6 @@ class Signup extends Component {
                   <label htmlFor="password">Password</label>
                   <input type="password" id="password-register" name="password" value={this.state.password} onChange={this.handleChange} className="form-control form-control-lg" />
               </div>
-              <div className="form-group">
-                  <label htmlFor="password2">Confirm Password</label>
-                  <input type="password" id="password2" name="password2" value={this.state.password2} onChange={this.handleChange} className="form-control form-control-lg" />
-              </div>
             </form>
           </Modal.Body>
           <Modal.Footer>
@@ -99,4 +99,4 @@ class Signup extends Component {
   }
 }
 
-export default Signup;
+export default withRouter(Signup);

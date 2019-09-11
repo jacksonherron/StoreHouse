@@ -17,4 +17,5 @@
 .navLink:hover{
     text-decoration: none;
     color: #61BCF9!important;
+    cursor: pointer;
 }

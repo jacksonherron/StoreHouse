@@ -1,5 +1,6 @@
-from app import db, marshmallow, login_manager
+from app import db, marshmallow, login_manager, InvalidUsage
 from flask import jsonify
+from sqlalchemy.orm import validates
 from datetime import datetime
 from flask_login import UserMixin, login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -17,6 +18,16 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(100), nullable=False)
     properties = db.relationship('Property', backref='user', lazy=True)
 
+    @validates('email')
+    def validate_email(self, key, address):
+        assert '@' in address
+        return address
+
+    @validates('first_name', 'last_name', 'password_hash')
+    def validate_name(self, key, value):
+        assert value != ''
+        return value
+
     def __init__(self, first_name, last_name, email, password):
         self.first_name = first_name
         self.last_name = last_name
@@ -33,7 +44,7 @@ class User(db.Model, UserMixin):
     def login(cls, email, password):
         user = User.query.filter_by(email=email).first()
         if user is None or not user.check_password(password):
-            return {"status": 404, "message": "Invalid username or password"}
+            return None
         login_user(user, remember=True)
         return user_schema.jsonify(user)
 
@@ -60,7 +71,14 @@ class User(db.Model, UserMixin):
 
     @classmethod
     def delete_user(cls, user_id):
-        return user_id
+        user = User.query.get(user_id)
+        try:
+            db.session.delete(user)
+            db.session.commit()
+        except:
+            db.session.rollback()
+            raise
+        return {"status": 200, "message": "Account succesfully deleted"}
 
 class UserSchema(marshmallow.Schema):
     class Meta:

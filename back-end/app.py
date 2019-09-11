@@ -1,14 +1,16 @@
 import os
 import json
 
-from flask import Flask, flash, request, redirect
+from flask import Flask, flash, request, redirect, jsonify
 from flask_login import LoginManager, current_user, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_cors import CORS
+from flask import jsonify
+
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -28,17 +30,34 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-# Convert SQLAlchemy object to JSON (from Stack Overflow)
-from sqlalchemy.ext.declarative import DeclarativeMeta
+# Exception class
+class InvalidUsage(Exception):
+    status_code = 400
 
+    def __init__(self, errors: list=[], status_code=None, payload=None):
+        Exception.__init__(self)
+        self.errors = errors
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
+
+    def to_dict(self):
+        res = dict(self.payload or ())
+        res['errors'] = self.errors
+        return res
 
  ### ------------------ ROUTES ------------------ ###
+
+@app.errorhandler(InvalidUsage)
+def handle_invalid_usage(error):
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
 
 @login_manager.user_loader
 def load_user(id):
     from models import User
     return User.query.get(int(id))
-
 
 @app.route('/')
 def Welcome():
@@ -55,37 +74,45 @@ def register():
         last_name = request.json['last_name']
         email = request.json['email']
         password = request.json['password']
-
-        new_user = User.create_user(first_name, last_name, email, password)
+        try:
+            new_user = User.create_user(first_name, last_name, email, password)
+        except:
+            raise InvalidUsage(["Account could not be created. Please try again."])
         return new_user
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if current_user.is_authenticated:
-        return {"status": 400, "message": "Already logged in"}
-    else:
-        from models import User
-        email = request.json['email']
-        password = request.json['password']
-        
-        user = User.login(email, password)
-        return user
+    from models import User
+    email = request.json['email']
+    password = request.json['password']
+    authenticated_user = User.login(email, password)
+
+    if authenticated_user is None:
+        raise InvalidUsage(["The email and password do not match a record. Please try again."])
+    return authenticated_user
 
 
-@app.route('/logout')
+@app.route('/logout', methods=['GET'])
 def logout():
     logout_user()
     return {"status": 200, "message": "Successfully logged out"}
 
 
 @app.route('/user', methods=['GET'])
-@app.route('/user/<user_id>', methods=['GET'])
-def get_user(user_id=None):
+@app.route('/user/<user_id>', methods=['GET', 'DELETE'])
+def get_or_delete_user(user_id=None):
     from models import User
     if user_id == None and request.method == 'GET':
         return User.get_users()
-    return User.get_user(user_id)
+    elif request.method == 'GET':
+        return User.get_user(user_id)
+    logout_user()
+    try:
+        confirmation = User.delete_user(user_id)
+    except:
+        raise InvalidUsage('Something went wrong please try again.')
+    return confirmation
 
 @app.route('/property', methods=['POST','GET'])
 @app.route('/property/<property_id>', methods=['GET'])

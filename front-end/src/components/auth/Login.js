@@ -5,13 +5,14 @@ import './Auth.css';
 import API_URL from '../../constants';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import Alert from 'react-bootstrap/Alert';
 
 
 class Login extends Component {
   state = {
     email: '',
     password: '',
-    errors: null
+    errors: []
   }
 
   handleChange = event => {
@@ -28,12 +29,13 @@ class Login extends Component {
 
     axios.post(`${API_URL}/login`, userInfo)
       .then(res => {
+        this.props.handleShowLogin()
         this.props.setCurrentUser(res.data.id, res.data.first_name, res.data.last_name);
         this.props.history.push('/home');
       })
-      .catch(err => console.log(err));
-    
-    this.props.handleShowLogin();
+      .catch(err => {
+        this.setState({ errors:err.response.data.errors })
+      });
   };
 
 
@@ -46,16 +48,21 @@ class Login extends Component {
   
         <Modal show={this.props.showLogin} onHide={this.props.handleShowLogin}>
           <Modal.Header closeButton>
-            <Modal.Title>Login</Modal.Title>
+            <Modal.Title>Log In</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {this.state.errors && this.state.errors.map((e, i) => (
-              <div className="alert alert-danger alert-dismissible fade show" style={{width: '100%'}} role="alert" key={i}>
-                  {e.message}
-                  <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
-              </div>
+            {this.state.errors && this.state.errors.map((error, i) => (
+              <Alert 
+                key={i}
+                variant="danger"
+                onClose={() => {
+                  let errors = this.state.errors;
+                  errors.splice(i);
+                  this.setState({ errors: errors })
+                }}
+                dismissible>
+                {error}
+              </Alert>
             ))}
             <form>
                 <div className="form-group">

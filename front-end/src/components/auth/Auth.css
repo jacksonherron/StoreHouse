@@ -9,6 +9,10 @@
     border-color: rgb(83, 162, 214)!important;
 }
 
+.alert {
+    max-width: 55vw;
+}
+
 .modal {
     display: flex!important;
     justify-content: center!important;
@@ -54,5 +58,9 @@
 @media only screen and (max-width: 600px) {
     .modal-content {
         min-width: 95vw;
+    }
+
+    .alert {
+        max-width: 90vw;
     }
 }
