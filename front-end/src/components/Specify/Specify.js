@@ -75,7 +75,6 @@ class Specify extends Component {
             payback_period: 5.67,
             user_id: currentUser.id,
         }
-        console.log(new_property)
         axios.post(`${API_URL}/specify`, 
             new_property,
             { withCredentials: true },
@@ -84,7 +83,7 @@ class Specify extends Component {
                 } 
             })
             .then(() => this.props.history.push('/home'))
-            .catch(err => console.log(err));
+            .catch(err => this.setState({ errors:err.response.data.errors }));
     };
 
     render() {
