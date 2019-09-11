@@ -46,9 +46,9 @@ class Signup extends Component {
   render() {
     return (
       <>
-        <Button onClick={this.props.handleShowSignup} className="modalOpen">
+        {/* <Button onClick={this.props.handleShowSignup} className="modalOpen">
           Sign Up
-        </Button>
+        </Button> */}
   
         <Modal show={this.props.showSignup} onHide={this.props.handleShowSignup}>
           <Modal.Header closeButton>

@@ -64,8 +64,8 @@ class App extends Component {
   render() {
     return (
       <>
-        <Navigation currentUser={this.state.currentUser} handleLogout={this.handleLogout} handleShowLogin={this.handleShowLogin} handleShowSignup={this.handleShowSignup} />
-        <Routes currentUser={this.state.currentUser} setCurrentUser={this.setCurrentUser} handleShowLogin={this.handleShowLogin} handleShowSignup={this.handleShowSignup} showLogin={this.state.showLogin} showSignup={this.state.showSignup} />
+        <Navigation currentUser={this.state.currentUser} setCurrentUser={this.setCurrentUser} handleLogout={this.handleLogout} handleShowLogin={this.handleShowLogin} handleShowSignup={this.handleShowSignup} showLogin={this.state.showLogin} showSignup={this.state.showSignup}/>
+        <Routes currentUser={this.state.currentUser} setCurrentUser={this.setCurrentUser} handleShowLogin={this.handleShowLogin} handleShowSignup={this.handleShowSignup}  />
         <Footer />
       </>
     );

@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import Landing from '../components/Landing/Landing'
 import Home from '../components/Home/Home';
+import About from '../components/About/About';
 import Specify from '../components/Specify/Specify';
 import NotFound from './NotFound/NotFound';
 
@@ -20,6 +21,7 @@ const Routes = ({ currentUser, setCurrentUser, showLogin, showSignup, handleShow
     return (
         <Switch>
             <Route exact path='/' render={() => <Landing currentUser={currentUser} setCurrentUser={setCurrentUser} showLogin={showLogin} showSignup={showSignup} handleShowLogin={handleShowLogin} handleShowSignup={handleShowSignup} />} />
+            <Route exact path='/about' render={() => <About />} />
             <PrivateRoute exact path='/home' component={ Home } currentUser={currentUser} setCurrentUser={setCurrentUser}/>
             <PrivateRoute exact path='/specify' component={ Specify } currentUser={currentUser} />
             <Route path='*' component={NotFound} />

@@ -34,7 +34,8 @@ class Login extends Component {
         this.props.history.push('/home');
       })
       .catch(err => {
-        this.setState({ errors:err.response.data.errors })
+        console.log(err)
+        // this.setState({ errors:err.response.data.errors })
       });
   };
 
@@ -42,9 +43,9 @@ class Login extends Component {
   render() {
     return (
       <>
-        <Button onClick={this.props.handleShowLogin} className="modalOpen">
+        {/* <Button onClick={this.props.handleShowLogin} className="modalOpen">
           Login
-        </Button>
+        </Button> */}
   
         <Modal show={this.props.showLogin} onHide={this.props.handleShowLogin}>
           <Modal.Header closeButton>

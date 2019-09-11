@@ -3,6 +3,7 @@ import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import './Specify.css';
 import API_URL from '../../constants';
+import Form from 'react-bootstrap/Form'
 
 class Specify extends Component {
     state = {
@@ -62,7 +63,7 @@ class Specify extends Component {
                     ))}
                     <form>
                         <div className="form-group">
-                            <label htmlFor="property_name">Name</label>
+                            <label htmlFor="property_name">Property Name</label>
                             <input type="text" id="property_name" name="property_name" value={this.state.property_name} onChange={this.handleChange} className="form-control form-control-lg" />
                         </div>
                         <div className="form-group">
@@ -79,15 +80,49 @@ class Specify extends Component {
                         </div>
                         <div className="form-group">
                             <label htmlFor="utility">Utility</label>
-                            <input type="text" id="utility" name="utility" value={this.state.utility} onChange={this.handleChange} className="form-control form-control-lg" />
+                            <Form.Control as="select" className="form-control form-control-lg">
+                                <option>Pacific Gas & Electric</option>
+                                <option>Southern California Edison</option>
+                            </Form.Control>
+                            {/* <input type="text" id="utility" name="utility" value={this.state.utility} onChange={this.handleChange} className="form-control form-control-lg" /> */}
                         </div>
                         <div className="form-group">
                             <label htmlFor="tariff">Tariff</label>
-                            <input type="text" id="tariff" name="tariff" value={this.state.tariff} onChange={this.handleChange} className="form-control form-control-lg" />
+                            <Form.Control as="select" className="form-control form-control-lg">
+                                <option>E1</option>
+                                <option>E1-T</option>
+                                <option>E2</option>
+                            </Form.Control>
+                            {/* <input type="text" id="tariff" name="tariff" value={this.state.tariff} onChange={this.handleChange} className="form-control form-control-lg" /> */}
+                        </div>
+                        <h2>Solar System Specification</h2>
+                        <div className="form-group">
+                            <label htmlFor="solar_system_kw">Capacity (kW)</label>
+                            <Form.Control as="select" className="form-control form-control-lg">
+                                <option>3</option>
+                                <option>6</option>
+                                <option>9</option>
+                                <option>12</option>
+                            </Form.Control>
+                            {/* <input type="text" id="solar_system" name="solar_system" value={this.state.solar_system} onChange={this.handleChange} className="form-control form-control-lg" /> */}
                         </div>
                         <div className="form-group">
-                            <label htmlFor="solar_system">Solar System</label>
-                            <input type="text" id="solar_system" name="solar_system" value={this.state.solar_system} onChange={this.handleChange} className="form-control form-control-lg" />
+                            <label htmlFor="solar_system_direction">Direction facing</label>
+                            <Form.Control as="select" className="form-control form-control-lg">
+                                <option>East</option>
+                                <option>South</option>
+                                <option>West</option>
+                            </Form.Control>
+                            {/* <input type="text" id="solar_system" name="solar_system" value={this.state.solar_system} onChange={this.handleChange} className="form-control form-control-lg" /> */}
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="solar_system_tilt">Tilt (&deg;)</label>
+                            <Form.Control as="select" className="form-control form-control-lg">
+                                <option>20</option>
+                                <option>30</option>
+                                <option>40</option>
+                            </Form.Control>
+                            {/* <input type="text" id="solar_system" name="solar_system" value={this.state.solar_system} onChange={this.handleChange} className="form-control form-control-lg" /> */}
                         </div>
                         <div className="form-group">
                             <label htmlFor="battery_system">Battery System</label>
