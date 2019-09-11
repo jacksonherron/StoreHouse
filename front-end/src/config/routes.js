@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import Landing from '../components/Landing/Landing'
 import Home from '../components/Home/Home';
 import Specify from '../components/Specify/Specify';
@@ -19,10 +19,10 @@ const Routes = ({ currentUser, setCurrentUser, showLogin, showSignup, handleShow
 
     return (
         <Switch>
-            <Route exact path='/' render={(props) => <Landing {...props} currentUser={currentUser} setCurrentUser={setCurrentUser} showLogin={showLogin} showSignup={showSignup} handleShowLogin={handleShowLogin} handleShowSignup={handleShowSignup} />} />
-            <Route exact path='/home' render={(props) => <Home {...props} currentUser={currentUser} setCurrentUser={setCurrentUser} showLogin={showLogin} showSignup={showSignup} handleShowLogin={handleShowLogin} handleShowSignup={handleShowSignup} />} />
+            <Route exact path='/' render={() => <Landing currentUser={currentUser} setCurrentUser={setCurrentUser} showLogin={showLogin} showSignup={showSignup} handleShowLogin={handleShowLogin} handleShowSignup={handleShowSignup} />} />
+            <Route exact path='/home' render={() => <Home currentUser={currentUser} setCurrentUser={setCurrentUser} showLogin={showLogin} showSignup={showSignup} handleShowLogin={handleShowLogin} handleShowSignup={handleShowSignup} />} />
             {/* <PrivateRoute exact path='/home' component={ Home } /> */}
-            <Route exact path='/specify' render={(props) => <Specify {...props} currentUser={currentUser} setCurrentUser={setCurrentUser} showLogin={showLogin} showSignup={showSignup} handleShowLogin={handleShowLogin} handleShowSignup={handleShowSignup} />} />
+            <Route exact path='/specify' render={() => <Specify currentUser={currentUser} setCurrentUser={setCurrentUser} showLogin={showLogin} showSignup={showSignup} handleShowLogin={handleShowLogin} handleShowSignup={handleShowSignup} />} />
             <Route path='*' component={NotFound} />
         </Switch>
     );

@@ -25,7 +25,7 @@ class GenabilityApiInterface():
 
     # Template API Request
     def send_api_request(self, endpoint_url, rest_verb, data: Dict = None):
-        url_string: str = f"https://api.genability.com/rest/{endpoint_url}"
+        url_string = f"https://api.genability.com/rest/{endpoint_url}"
         auth_tuple = (self.app_id, self.app_key)
         if rest_verb == "GET":
             api_response: requests.Response = requests.get(url_string, params=data, auth=auth_tuple)

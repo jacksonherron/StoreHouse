@@ -1,7 +1,8 @@
 import os
+import json
 
-from flask import Flask, request
-from flask_login import LoginManager
+from flask import Flask, flash, request, redirect
+from flask_login import LoginManager, current_user, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_cors import CORS
@@ -14,6 +15,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 # Setup Database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'db.StoreHouse')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = "thisismydeepestdarkestsecret"
 
 # Init Database
 db = SQLAlchemy(app)
@@ -24,34 +26,67 @@ marshmallow = Marshmallow(app)
 # Init Flask Login
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = 'login'
 
-DEBUG = True
-PORT = 8000
+# Convert SQLAlchemy object to JSON (from Stack Overflow)
+from sqlalchemy.ext.declarative import DeclarativeMeta
 
+
+ ### ------------------ ROUTES ------------------ ###
 
 @login_manager.user_loader
-def load_user(user_id):
-    return User.get(user_id)
+def load_user(id):
+    from models import User
+    return User.query.get(int(id))
+
 
 @app.route('/')
 def Welcome():
     return 'Welcome to StoreHouse DB'
 
-@app.route('/user', methods=['POST', 'GET'])
-@app.route('/user/<user_id>', methods=['GET'])
-def get_or_create_user(user_id=None):
+
+@app.route('/register', methods=['POST'])
+def register():
     from models import User
-    if user_id == None and request.method == 'GET':
-        return User.get_users()
-    elif user_id == None:
+    if current_user.is_authenticated:
+        return {"status": 400, "message": "Already logged in"}
+    else:
         first_name = request.json['first_name']
         last_name = request.json['last_name']
         email = request.json['email']
         password = request.json['password']
-        return User.create_user(first_name, last_name, email, password)
+
+        new_user = User.create_user(first_name, last_name, email, password)
+        return new_user
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return {"status": 400, "message": "Already logged in"}
     else:
-        return User.get_user(user_id)
-    
+        from models import User
+        email = request.json['email']
+        password = request.json['password']
+        
+        user = User.login(email, password)
+        return user
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return {"status": 200, "message": "Successfully logged out"}
+
+
+@app.route('/user', methods=['GET'])
+@app.route('/user/<user_id>', methods=['GET'])
+def get_user(user_id=None):
+    from models import User
+    if user_id == None and request.method == 'GET':
+        return User.get_users()
+    return User.get_user(user_id)
+
 @app.route('/property', methods=['POST','GET'])
 @app.route('/property/<property_id>', methods=['GET'])
 def get_or_create_property(property_id=None):
@@ -76,4 +111,4 @@ def get_or_create_property(property_id=None):
 
 
 if __name__ == '__main__':
-    app.run(debug=DEBUG, port=PORT)
+    app.run(debug=True, port=8000)

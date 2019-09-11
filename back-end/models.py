@@ -1,7 +1,8 @@
-from app import db, marshmallow
+from app import db, marshmallow, login_manager
 from flask import jsonify
 from datetime import datetime
-from flask_login import UserMixin
+from flask_login import UserMixin, login_user, logout_user
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 ##################### USER MODEL #####################
@@ -13,14 +14,28 @@ class User(db.Model, UserMixin):
     first_name = db.Column(db.String(100), nullable=False)
     last_name  = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(200), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
+    password_hash = db.Column(db.String(100), nullable=False)
     properties = db.relationship('Property', backref='user', lazy=True)
 
     def __init__(self, first_name, last_name, email, password):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
-        self.password = password
+        self.set_password(password)
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    @classmethod
+    def login(cls, email, password):
+        user = User.query.filter_by(email=email).first()
+        if user is None or not user.check_password(password):
+            return {"status": 404, "message": "Invalid username or password"}
+        login_user(user, remember=True)
+        return user_schema.jsonify(user)
 
     @classmethod
     def create_user(cls, first_name, last_name, email, password):
@@ -43,12 +58,14 @@ class User(db.Model, UserMixin):
         user = User.query.get(user_id)
         return user_schema.jsonify(user)
 
+    @classmethod
+    def delete_user(cls, user_id):
+        return user_id
+
 class UserSchema(marshmallow.Schema):
     class Meta:
-        fields = ('id', 'first_name', 'last_name', 'email', 'password')
+        fields = ('id', 'first_name', 'last_name', 'email', 'password_hash')
 
-user_email_table = {u.email: u for u in users}
-userid_table = {u.id: u for u in users}
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
 

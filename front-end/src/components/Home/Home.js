@@ -9,10 +9,12 @@ class Home extends Component {
     };
 
     render() {
+        // const currentUser = JSON.parse(this.props.currentUser)
+        console.log(this.props.currentUser)
         return (
             <div className="homePage">
                 <div className="welcome">
-                    <h1>Welcome,<span className="username">Current User</span></h1>
+                    <h1>Welcome<span className="username">{this.props.currentUser.first_name}</span> ,</h1>
                 </div>
                 <div className="properties">
                     <h2>Your Properties</h2>

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-// import axios from 'axios';
+import { withRouter } from 'react-router-dom'
+import axios from 'axios';
 import './Auth.css';
-// import API_URL from '../../constants';
+import API_URL from '../../constants';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
@@ -25,18 +26,14 @@ class Login extends Component {
         password: this.state.password
     }
 
-    console.log(userInfo)
-    this.props.handleShowLogin()
-
-    // axios.post(`${API_URL}/auth/login`, userInfo, { withCredentials: true })
-    //     .then(res => {
-    //         this.clearModal();
-    //         this.props.setCurrentUser(res.data.id, res.data.username);
-    //         this.props.history.push('/home');
-    //     })
-    //     .catch(err => {
-    //         this.setState({ errors: err.response.data.errors });
-    // });
+    axios.post(`${API_URL}/login`, userInfo)
+      .then(res => {
+        this.props.setCurrentUser(res.data.id, res.data.first_name, res.data.last_name);
+        this.props.history.push('/home');
+      })
+      .catch(err => console.log(err));
+    
+    this.props.handleShowLogin();
   };
 
 
@@ -82,4 +79,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default withRouter(Login);

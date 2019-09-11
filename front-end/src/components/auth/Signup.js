@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-// import axios from 'axios';
+import axios from 'axios';
 import './Auth.css';
-// import API_URL from '../../constants';
+import API_URL from '../../constants';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
@@ -22,15 +22,17 @@ class Signup extends Component {
   };
 
   handleSubmit = (event) => {
-    const newUser = {
+    const new_user = {
         first_name: this.state.first_name,
         last_name: this.state.last_name,
         email: this.state.email,
         password: this.state.password,
-        password2: this.state.password2,
     }
 
-    console.log(newUser)
+    axios.post(`${API_URL}/register`, new_user)
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+
     this.props.handleShowSignup()
 
       // axios.post(`${API_URL}/auth/register`, newUser)

@@ -3,7 +3,7 @@ import './Landing.css'
 import Login from '../auth/Login';
 import Signup from '../auth/Signup';
 
-const Landing = ({ showLogin, showSignup, handleShowLogin, handleShowSignup }) => {
+const Landing = ({ currentUser, setCurrentUser, showLogin, showSignup, handleShowLogin, handleShowSignup }) => {
     return(
         <div className="landing">
             <div className="brand">
@@ -12,10 +12,10 @@ const Landing = ({ showLogin, showSignup, handleShowLogin, handleShowSignup }) =
                 <i className="fas fa-sun"></i>
             </div>
             <p className="slogan">Fast, simple solar and storage cost savings calculator for California property owners</p>
-            <div className='auth-buttons'>
-                <Login showLogin={showLogin} handleShowLogin={handleShowLogin} />
-                <Signup showSignup={showSignup} handleShowSignup={handleShowSignup}/>
-            </div>
+            { !currentUser && <div className='auth-buttons'>
+                <Login showLogin={showLogin} handleShowLogin={handleShowLogin} currentUser={currentUser} setCurrentUser={setCurrentUser} />
+                <Signup showSignup={showSignup} handleShowSignup={handleShowSignup} currentUser={currentUser} setCurrentUser={setCurrentUser} />
+            </div>}
         </div>
     )
 }
