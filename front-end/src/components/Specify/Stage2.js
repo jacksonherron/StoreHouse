@@ -2,15 +2,14 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
 
-const Stage2 = ({handleChangeStage}) => {
+const Stage2 = ({ handleChange, handleChangeStage, utility }) => {
     return(
         <>
-            <h3>Utility</h3>
             <div className="form-group">
                 <label htmlFor="utility">Utility</label>
-                <Form.Control as="select" className="form-control form-control-lg">
-                    <option>Pacific Gas & Electric</option>
-                    <option>Southern California Edison</option>
+                <Form.Control name="utility" value={utility} onChange={handleChange} as="select" className="form-control form-control-lg">
+                    <option value="PGE" >Pacific Gas & Electric</option>
+                    <option value="SCE" >Southern California Edison</option>
                 </Form.Control>
             </div>
             <Button id="previous" variant="secondary" onClick={handleChangeStage}>Previous</Button>

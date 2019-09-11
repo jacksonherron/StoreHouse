@@ -4,7 +4,6 @@ import Button from 'react-bootstrap/Button';
 const Stage1 = ({ handleChange, handleChangeStage, property_name, address_line_1, address_line_2, city, zipcode }) => {
     return(
         <>
-            <h3>Site</h3>
             <div className="form-group address">
                 <label htmlFor="property_name">Property Name</label>
                 <input type="text" id="property_name" name="property_name" value={property_name} onChange={handleChange} className="form-control form-control-lg" />

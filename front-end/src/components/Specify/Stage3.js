@@ -2,16 +2,15 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
 
-const Stage3 = ({ handleChange, handleChangeStage }) => {
+const Stage3 = ({ handleChange, handleChangeStage, tariff }) => {
     return(
         <>
-            <h3>Tariff</h3>
             <div className="form-group">
                 <label htmlFor="tariff">Tariff</label>
-                <Form.Control as="select" className="form-control form-control-lg">
-                    <option>E1</option>
-                    <option>E1-T</option>
-                    <option>E2</option>
+                <Form.Control name="tariff" value={tariff} onChange={handleChange} as="select" className="form-control form-control-lg">
+                    <option value="E1">E1</option>
+                    <option value="E1-T">E1-T</option>
+                    <option value="E2">E2</option>
                 </Form.Control>
             </div>
             <Button id="previous" variant="secondary" onClick={handleChangeStage}>Previous</Button>

@@ -2,19 +2,19 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
 
-const Stage6 = ({ handleChange, handleChangeStage }) => {
+const Stage6 = ({ handleChange, handleSubmit, handleChangeStage, battery_system }) => {
     return(
         <>
             <h3>Battery System Specification</h3>
             <div className="form-group">
                 <label htmlFor="battery_system">Battery System</label>
-                <Form.Control as="select" className="form-control form-control-lg">
-                    <option>Tesla Powerwall - 14 kWh, 5 kW</option>
-                    <option>LG Chem RESU - 10 kWh, 5 kW</option>
+                <Form.Control name="battery_system" value={battery_system} onChange={handleChange} as="select" className="form-control form-control-lg">
+                    <option value="1" >Tesla Powerwall (14 kWh, 5 kW)</option>
+                    <option value="2" >LG Chem RESU (10 kWh, 5 kW)</option>
                 </Form.Control>
             </div>
             <Button id="previous" variant="secondary" onClick={handleChangeStage}>Previous</Button>
-            <Button id="submit" variant="primary">Submit</Button>
+            <Button id="submit" variant="primary" onClick={handleSubmit}>Submit</Button>
         </>
     );
 };

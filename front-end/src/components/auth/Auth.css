@@ -46,6 +46,10 @@
     border-color: rgba(0, 0, 0, 0.7)!important;
 }
 
+input {
+    min-width: 100;
+}
+
 .submit {
     background-color: #61BCF9!important;
     border-color: #61BCF9!important;
@@ -53,6 +57,10 @@
 .submit:hover {
     background-color: rgb(83, 162, 214)!important;
     border-color: rgb(83, 162, 214)!important;
+}
+
+.form-group {
+    min-width: 100%;
 }
 
 @media only screen and (max-width: 600px) {

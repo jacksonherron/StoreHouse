@@ -18,16 +18,20 @@ class Specify extends Component {
         address_line_2: '', 
         city: '',
         zipcode: '',
-        utility: '',
-        tariff: '',
+        utility: 'PGE',
+        tariff: 'E1-T',
         month_1_usage: '',
         month_2_usage: '',
         month_3_usage: '',
-        solar_system: '',
-        battery_system: '',
+        solar_system_kw: '3',
+        solar_system_dir: 'SOUTH',
+        solar_system_tilt: '200',
+        battery_system: '1',
         errors: [],
         stage: 1
     };
+
+    stages = ['Site', 'Utility', 'Tariff', 'Electricity Usage', 'Solar System Specification', 'Battery System Specification']
 
     handleChange = (event) => {
             this.setState({
@@ -51,6 +55,7 @@ class Specify extends Component {
     }
     
     handleSubmit = (event) => {
+        const currentUser = JSON.parse(this.props.currentUser);
         const new_property = {
             property_name: this.state.property_name,
             address_line_1: this.state.address_line_1,
@@ -62,23 +67,31 @@ class Specify extends Component {
             month_1_usage: this.state.month_1_usage,
             month_2_usage: this.state.month_2_usage,
             month_3_usage: this.state.month_3_usage,
-            solar_system: this.state.solar_system,
+            solar_system_kw: this.state.solar_system_kw,
+            solar_system_dir: this.state.solar_system_dir,
+            solar_system_tilt: this.state.solar_system_tilt,
             battery_system: this.state.battery_system,
             monthly_savings: 145.32,
             payback_period: 5.67,
-            user_id: this.props.currentUser.id,
+            user_id: currentUser.id,
         }
-    
-        axios.post(`${API_URL}/specify`, new_property)
+        console.log(new_property)
+        axios.post(`${API_URL}/specify`, 
+            new_property,
+            { withCredentials: true },
+            { headers: {
+                "Access-Control-Allow-Origin": "*"
+                } 
+            })
             .then(() => this.props.history.push('/home'))
             .catch(err => console.log(err));
     };
 
     render() {
-        // const currentUser = JSON.parse(this.props.currentUser);
         return (
             <div className="specify">
                 <h1>New Property</h1>
+                <h2>{this.stages[this.state.stage-1]}</h2>
                 <p>Step {this.state.stage} / 6</p>
                 <div>
                     {this.state.errors && this.state.errors.map((error, i) => (
@@ -96,11 +109,11 @@ class Specify extends Component {
                     ))}
                     <form>
                         { this.state.stage===1 && <Stage1 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} property_name={this.state.property_name} address_line_1={this.state.address_line_1} address_line_2={this.state.address_line_2} city={this.state.city} zipcode={this.state.zipcode}/> }
-                        { this.state.stage===2 && <Stage2 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} /> }
-                        { this.state.stage===3 && <Stage3 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} /> }
+                        { this.state.stage===2 && <Stage2 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} utility={this.state.utility}/> }
+                        { this.state.stage===3 && <Stage3 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} tariff={this.state.tariff}/> }
                         { this.state.stage===4 && <Stage4 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} month_1_usage={this.state.month_1_usage} month_2_usage={this.state.month_2_usage} month_3_usage={this.state.month_3_usage}/> }
-                        { this.state.stage===5 && <Stage5 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} /> }
-                        { this.state.stage===6 && <Stage6 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} handleSubmit={this.handleSubmit} /> }
+                        { this.state.stage===5 && <Stage5 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} solar_system_kw={this.state.solar_system_kw} solar_system_dir={this.state.solar_system_dir} solar_system_tilt={this.state.solar_system_tilt} /> }
+                        { this.state.stage===6 && <Stage6 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} handleSubmit={this.handleSubmit} battery_system={this.state.battery_system}/> }
                     </form>
                 </div>
             </div>

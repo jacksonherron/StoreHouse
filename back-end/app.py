@@ -114,7 +114,7 @@ def get_or_delete_user(user_id=None):
         raise InvalidUsage('Something went wrong please try again.')
     return confirmation
 
-@app.route('/property', methods=['POST','GET'])
+@app.route('/specify', methods=['POST','GET'])
 @app.route('/property/<property_id>', methods=['GET'])
 def get_or_create_property(property_id=None):
     from models import Property
@@ -124,15 +124,21 @@ def get_or_create_property(property_id=None):
         property_name = request.json['property_name']
         address_line_1 = request.json['address_line_1']
         address_line_2 = request.json['address_line_2']
-        address_line_3 = request.json['address_line_3']
+        city = request.json['city']
+        zipcode = request.json['zipcode']
         utility = request.json['utility']
         tariff = request.json['tariff']
-        solar_system = request.json['solar_system']
+        month_1_usage = request.json['month_1_usage']
+        month_2_usage = request.json['month_2_usage']
+        month_3_usage = request.json['month_3_usage']
+        solar_system_kw = request.json['solar_system_kw']
+        solar_system_dir = request.json['solar_system_dir']
+        solar_system_tilt = request.json['solar_system_tilt']
         battery_system = request.json['battery_system']
         monthly_savings = request.json['monthly_savings']
         payback_period = request.json['payback_period']
         user_id = request.json['user_id']
-        return Property.create_property(property_name, address_line_1, address_line_2, address_line_3, utility, tariff, solar_system, battery_system, monthly_savings, payback_period, user_id)
+        return Property.create_property(property_name, address_line_1, address_line_2, city, zipcode, utility, tariff, month_1_usage, month_2_usage, month_3_usage, solar_system_kw, solar_system_dir, solar_system_tilt, battery_system, monthly_savings, payback_period, user_id)
     else:
         return Property.get_property(property_id)
 

@@ -88,7 +88,6 @@ user_schema = UserSchema()
 users_schema = UserSchema(many=True)
 
 
-
 ##################### POSTS MODEL #####################
 
 class Property(db.Model):
@@ -98,32 +97,44 @@ class Property(db.Model):
     property_name = db.Column(db.String(300), nullable=False)
     address_line_1 = db.Column(db.String(300), nullable=False)
     address_line_2 = db.Column(db.String(300), nullable=False)
-    address_line_3 = db.Column(db.String(300), nullable=False)
+    city = db.Column(db.String(100), nullable=False)
+    zipcode = db.Column(db.String(100), nullable=False)
     utility = db.Column(db.String(300), nullable=False)
-    tariff = db.Column(db.String(300), nullable=False)
-    solar_system = db.Column(db.String(300), nullable=False)
-    battery_system = db.Column(db.String(300), nullable=False)
+    tariff = db.Column(db.String(100), nullable=False)
+    month_1_usage = db.Column(db.String(100), nullable=False)
+    month_2_usage = db.Column(db.String(100), nullable=False)
+    month_3_usage = db.Column(db.String(100), nullable=False)
+    solar_system_kw = db.Column(db.String(100), nullable=False)
+    solar_system_dir = db.Column(db.String(100), nullable=False)
+    solar_system_tilt = db.Column(db.String(100), nullable=False)
+    battery_system = db.Column(db.String(100), nullable=False)
     monthly_savings = db.Column(db.Float, nullable=False)
     payback_period = db.Column(db.Float, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-    def __init__(self, property_name, address_line_1, address_line_2, address_line_3, utility, tariff, solar_system, battery_system, monthly_savings, payback_period, user_id):
+    def __init__(self, property_name, address_line_1, address_line_2, city, zipcode, utility, tariff, month_1_usage, month_2_usage, month_3_usage, solar_system_kw, solar_system_dir, solar_system_tilt, battery_system, monthly_savings, payback_period, user_id):
         self.property_name = property_name
         self.address_line_1 = address_line_1
         self.address_line_2 = address_line_2
-        self.address_line_3 = address_line_3
+        self.city = city
+        self.zipcode = zipcode
         self.utility = utility
         self.tariff = tariff
-        self.solar_system = solar_system
+        self.month_1_usage = month_1_usage
+        self.month_2_usage = month_2_usage
+        self.month_3_usage = month_3_usage
+        self.solar_system_kw = solar_system_kw
+        self.solar_system_dir = solar_system_dir
+        self.solar_system_tilt = solar_system_tilt
         self.battery_system = battery_system
         self.monthly_savings = monthly_savings
         self.payback_period = payback_period
         self.user_id = user_id
 
     @classmethod
-    def create_property(cls, property_name, address_line_1, address_line_2, address_line_3, utility, tariff, solar_system, battery_system, monthly_savings, payback_period, user_id):
-        new_property = Property(property_name, address_line_1, address_line_2, address_line_3, utility, tariff, solar_system, battery_system, monthly_savings, payback_period, user_id)
+    def create_property(cls, property_name, address_line_1, address_line_2, city, zipcode, utility, tariff, month_1_usage, month_2_usage, month_3_usage, solar_system_kw, solar_system_dir, solar_system_tilt, battery_system, monthly_savings, payback_period, user_id):
+        new_property = Property(property_name, address_line_1, address_line_2, city, zipcode, utility, tariff, month_1_usage, month_2_usage, month_3_usage, solar_system_kw, solar_system_dir, solar_system_tilt, battery_system, monthly_savings, payback_period, user_id)
         try:
             db.session.add(new_property)
             db.session.commit()
@@ -142,10 +153,9 @@ class Property(db.Model):
         found_property = Property.query.get(property_id)
         return property_schema.jsonify(found_property)
 
-
 class PropertySchema(marshmallow.Schema):
     class Meta:
-        fields = ('property_name', 'address_line_1', 'address_line_2', 'address_line_3', 'utility', 'tariff', 'solar_system', 'battery_system', 'monthly_savings', 'payback_period', 'user_id', 'timestamp')
+        fields = ('property_name', 'address_line_1', 'address_line_2', 'city', 'zipcode', 'utility', 'tariff', 'month_1_usage', 'month_2_usage', 'month_3_usage', 'solar_system_kw', 'solar_system_dir', 'solar_system_tilt', 'battery_system', 'monthly_savings', 'payback_period', 'user_id')
 
 property_schema = PropertySchema()
 properties_schema = PropertySchema(many=True)
