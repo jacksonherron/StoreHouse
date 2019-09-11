@@ -52,7 +52,7 @@ class GenabilityApiInterface():
             address2,
             city,
             zipcode,
-            country,
+            country="US",
             customer_class = "residential",
         ):
 

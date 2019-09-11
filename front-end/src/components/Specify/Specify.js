@@ -3,16 +3,26 @@ import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import './Specify.css';
 import API_URL from '../../constants';
-import Form from 'react-bootstrap/Form'
+import Alert from 'react-bootstrap/Alert'
+import Stage1 from './Stage1';
+import Stage2 from './Stage2';
+import Stage3 from './Stage3';
+import Stage4 from './Stage4';
+import Stage5 from './Stage5';
+import Stage6 from './Stage6';
 
 class Specify extends Component {
     state = {
         property_name: '',
         address_line_1: '',
         address_line_2: '', 
-        address_line_3: '',
+        city: '',
+        zipcode: '',
         utility: '',
         tariff: '',
+        month_1_usage: '',
+        month_2_usage: '',
+        month_3_usage: '',
         solar_system: '',
         battery_system: '',
         errors: [],
@@ -24,15 +34,34 @@ class Specify extends Component {
             [event.target.name]: event.target.value,
             });
         };
+
+    handleChangeStage = (event) => {
+        if (event.target.id === "next") {
+            if (this.state.stage === 6) {
+                return
+            }
+            this.setState({ stage: this.state.stage + 1})
+        }
+        if (event.target.id === "previous") {
+            if (this.state.stage === 1) {
+                return
+            }
+            this.setState({ stage: this.state.stage - 1})
+        }
+    }
     
-      handleSubmit = (event) => {
+    handleSubmit = (event) => {
         const new_property = {
             property_name: this.state.property_name,
             address_line_1: this.state.address_line_1,
-            address_line_2: this.state.address_line_2, 
-            address_line_3: this.state.address_line_3,
+            address_line_2: this.state.address_line_2,
+            city: this.state.city,
+            zipcode: this.state.zipcode,
             utility: this.state.utility,
             tariff: this.state.tariff,
+            month_1_usage: this.state.month_1_usage,
+            month_2_usage: this.state.month_2_usage,
+            month_3_usage: this.state.month_3_usage,
             solar_system: this.state.solar_system,
             battery_system: this.state.battery_system,
             monthly_savings: 145.32,
@@ -43,91 +72,35 @@ class Specify extends Component {
         axios.post(`${API_URL}/specify`, new_property)
             .then(() => this.props.history.push('/home'))
             .catch(err => console.log(err));
-      };
+    };
 
     render() {
-        const currentUser = JSON.parse(this.props.currentUser);
+        // const currentUser = JSON.parse(this.props.currentUser);
         return (
             <div className="specify">
-                <div className="welcome">
-                    <h1>{currentUser.first_name} {currentUser.last_name}</h1>
-                </div>
+                <h1>New Property</h1>
+                <p>Step {this.state.stage} / 6</p>
                 <div>
-                    {this.state.errors && this.state.errors.map((e, i) => (
-                        <div className="alert alert-danger alert-dismissible fade show" style={{width: '100%'}} role="alert" key={i}>
-                            {e.message}
-                            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
+                    {this.state.errors && this.state.errors.map((error, i) => (
+                        <Alert 
+                            key={i}
+                            variant="danger"
+                            onClose={() => {
+                            let errors = this.state.errors;
+                            errors.splice(i);
+                            this.setState({ errors: errors })
+                            }}
+                            dismissible>
+                            {error}
+                        </Alert>
                     ))}
                     <form>
-                        <div className="form-group">
-                            <label htmlFor="property_name">Property Name</label>
-                            <input type="text" id="property_name" name="property_name" value={this.state.property_name} onChange={this.handleChange} className="form-control form-control-lg" />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="address_line_1">Line 1</label>
-                            <input type="text" id="address_line_1" name="address_line_1" value={this.state.address_line_1} onChange={this.handleChange} className="form-control form-control-lg" />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="address_line_2">Line 2</label>
-                            <input type="text" id="address_line_2" name="address_line_2" value={this.state.address_line_2} onChange={this.handleChange} className="form-control form-control-lg" />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="address_line_3">Line 3</label>
-                            <input type="text" id="address_line_3" name="address_line_3" value={this.state.address_line_3} onChange={this.handleChange} className="form-control form-control-lg" />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="utility">Utility</label>
-                            <Form.Control as="select" className="form-control form-control-lg">
-                                <option>Pacific Gas & Electric</option>
-                                <option>Southern California Edison</option>
-                            </Form.Control>
-                            {/* <input type="text" id="utility" name="utility" value={this.state.utility} onChange={this.handleChange} className="form-control form-control-lg" /> */}
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="tariff">Tariff</label>
-                            <Form.Control as="select" className="form-control form-control-lg">
-                                <option>E1</option>
-                                <option>E1-T</option>
-                                <option>E2</option>
-                            </Form.Control>
-                            {/* <input type="text" id="tariff" name="tariff" value={this.state.tariff} onChange={this.handleChange} className="form-control form-control-lg" /> */}
-                        </div>
-                        <h2>Solar System Specification</h2>
-                        <div className="form-group">
-                            <label htmlFor="solar_system_kw">Capacity (kW)</label>
-                            <Form.Control as="select" className="form-control form-control-lg">
-                                <option>3</option>
-                                <option>6</option>
-                                <option>9</option>
-                                <option>12</option>
-                            </Form.Control>
-                            {/* <input type="text" id="solar_system" name="solar_system" value={this.state.solar_system} onChange={this.handleChange} className="form-control form-control-lg" /> */}
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="solar_system_direction">Direction facing</label>
-                            <Form.Control as="select" className="form-control form-control-lg">
-                                <option>East</option>
-                                <option>South</option>
-                                <option>West</option>
-                            </Form.Control>
-                            {/* <input type="text" id="solar_system" name="solar_system" value={this.state.solar_system} onChange={this.handleChange} className="form-control form-control-lg" /> */}
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="solar_system_tilt">Tilt (&deg;)</label>
-                            <Form.Control as="select" className="form-control form-control-lg">
-                                <option>20</option>
-                                <option>30</option>
-                                <option>40</option>
-                            </Form.Control>
-                            {/* <input type="text" id="solar_system" name="solar_system" value={this.state.solar_system} onChange={this.handleChange} className="form-control form-control-lg" /> */}
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="battery_system">Battery System</label>
-                            <input type="text" id="battery_system" name="battery_system" value={this.state.battery_system} onChange={this.handleChange} className="form-control form-control-lg" />
-                        </div>
+                        { this.state.stage===1 && <Stage1 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} property_name={this.state.property_name} address_line_1={this.state.address_line_1} address_line_2={this.state.address_line_2} city={this.state.city} zipcode={this.state.zipcode}/> }
+                        { this.state.stage===2 && <Stage2 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} /> }
+                        { this.state.stage===3 && <Stage3 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} /> }
+                        { this.state.stage===4 && <Stage4 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} month_1_usage={this.state.month_1_usage} month_2_usage={this.state.month_2_usage} month_3_usage={this.state.month_3_usage}/> }
+                        { this.state.stage===5 && <Stage5 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} /> }
+                        { this.state.stage===6 && <Stage6 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} handleSubmit={this.handleSubmit} /> }
                     </form>
                 </div>
             </div>

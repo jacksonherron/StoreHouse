@@ -4,6 +4,20 @@
     padding: 5rem;
 }
 
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.address input {
+    min-width: 500px;
+}
+
+.submit {
+    align-self: center
+}
+
 
 @media only screen and (max-width: 600px) {
     .specify {

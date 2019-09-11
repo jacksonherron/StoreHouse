@@ -1,10 +1,8 @@
 import React from 'react';
 import './Landing.css'
-import Login from '../auth/Login';
-import Signup from '../auth/Signup';
 import Button from 'react-bootstrap/Button'
 
-const Landing = ({ currentUser, setCurrentUser, showLogin, showSignup, handleShowLogin, handleShowSignup }) => {
+const Landing = ({ currentUser, handleShowLogin, handleShowSignup }) => {
     return(
         <div className="landing">
             <div className="brand">
@@ -20,8 +18,6 @@ const Landing = ({ currentUser, setCurrentUser, showLogin, showSignup, handleSho
             <Button onClick={handleShowSignup} className="modalOpen">
                 Signup
             </Button>
-                {/* <Login showLogin={showLogin} handleShowLogin={handleShowLogin} currentUser={currentUser} setCurrentUser={setCurrentUser} />
-                <Signup showSignup={showSignup} handleShowSignup={handleShowSignup} currentUser={currentUser} setCurrentUser={setCurrentUser} /> */}
             </div>}
         </div>
     )
