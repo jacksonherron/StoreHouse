@@ -16,7 +16,7 @@ class User(db.Model, UserMixin):
     last_name  = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(200), unique=True, nullable=False)
     password_hash = db.Column(db.String(100), nullable=False)
-    properties = db.relationship('Property', backref='user', lazy=True)
+    properties = db.relationship('Property', backref='user', lazy=True, cascade="all, delete")
 
     @validates('email')
     def validate_email(self, key, address):
@@ -146,6 +146,11 @@ class Property(db.Model):
     @classmethod
     def get_properties(cls):
         found_properties = Property.query.all()
+        return properties_schema.jsonify(found_properties)
+
+    @classmethod
+    def get_user_properties(cls, user_id):
+        found_properties = Property.query.filter(Property.user_id == user_id)
         return properties_schema.jsonify(found_properties)
 
     @classmethod

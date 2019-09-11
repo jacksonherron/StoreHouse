@@ -5,6 +5,7 @@ import { Link, withRouter } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert'
+import Card from 'react-bootstrap/Card'
 import API_URL from '../../constants';
 
 class Home extends Component {
@@ -19,6 +20,27 @@ class Home extends Component {
         }
         this.setState({ showModal: true })
     }
+
+    componentDidMount = () => {
+        const currentUser = JSON.parse(this.props.currentUser);
+        axios.get(
+            `${API_URL}/property`,
+            {params: {
+                    user_id: currentUser.id
+                }
+            },
+            { withCredentials: true },
+            { headers: {
+                    "Access-Control-Allow-Origin": "*"
+                } 
+            } 
+        )
+        .then((res) => {
+            this.setState({properties: res.data});
+        })
+        .catch((err) => console.log(err.response))
+    }
+
 
     deleteAccount = () => {
         const currentUser = JSON.parse(this.props.currentUser);
@@ -35,6 +57,7 @@ class Home extends Component {
                 this.props.setCurrentUser(null);
                 this.props.history.push('/');
             })
+            .catch((err) => console.log(err.response))
     };
 
     render() {
@@ -46,10 +69,23 @@ class Home extends Component {
                     <h1><span className="username">{currentUser && currentUser.first_name} {currentUser && currentUser.last_name}</span> ,</h1>
                 </div>
                 <div className="properties">
-                    <h2>Your Properties</h2>
+                <h2 className="">Your Properties</h2>
+                    <div className="properties-container">
+                        {this.state.properties && this.state.properties.map((property, i) => (
+                            <Card style={{ width: '18rem' }} key={i}>
+                                <Card.Body>
+                                <Card.Title>{property.property_name}</Card.Title>
+                                <Card.Text>
+                                    {property.city}
+                                </Card.Text>
+                                <Button className="begin">View detail</Button>
+                                </Card.Body>
+                            </Card>
+                        ))}
+                    </div>
                 </div>
                 <div className="newProperty">
-                    <h2>Add a Property</h2>
+                <h2>Add a new Property</h2>
                     <p>This process will walkthrough specifying a new solar and storage system for one of your properties. It shouldn't take any longer than 10 minutes to complete.</p>
                     <Link to='/specify' ><Button className="begin">Begin</Button></Link>
                     <p className="deleteAccount" onClick={this.handleShowModal} >Delete Account</p>

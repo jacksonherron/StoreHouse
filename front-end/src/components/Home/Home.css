@@ -13,6 +13,18 @@
     margin-top: 3rem;
 }
 
+.properties-container {
+    margin-top: 1rem;
+    min-width: 95vw;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.property {
+    margin: 15px;
+}
+
 .deleteAccount:hover {
     cursor: pointer;
     text-decoration: underline;
@@ -24,7 +36,7 @@
 }
 
 .newProperty {
-    margin-top: 7rem;
+    margin-top: 3rem;
 }
 
 .welcome {
@@ -46,6 +58,9 @@
 .properties, .newProperty {
     max-width: 800px;
 }
+
+
+
 
 .properties h2 {
     color: rgba(0, 0, 0, 0.7);
