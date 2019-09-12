@@ -31,7 +31,14 @@ class Signup extends Component {
         password: this.state.password,
     }
 
-    axios.post(`${API_URL}/register`, new_user)
+    axios.post(
+      `${API_URL}/register`,
+      new_user,
+      { withCredentials: true },
+      { headers: {
+        "Access-Control-Allow-Origin": "*"
+      } }
+      )
       .then(res => {
         this.props.handleShowSignup()
         this.props.setCurrentUser(res.data.id, res.data.first_name, res.data.last_name);

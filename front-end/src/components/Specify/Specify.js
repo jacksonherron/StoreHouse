@@ -19,7 +19,7 @@ class Specify extends Component {
         city: '',
         zipcode: '',
         utility: 'PGE',
-        tariff: 'E1-T',
+        tariff: 'E1',
         month_1_usage: '',
         month_2_usage: '',
         month_3_usage: '',

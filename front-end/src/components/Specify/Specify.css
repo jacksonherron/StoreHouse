@@ -4,6 +4,10 @@
     padding: 5rem;
 }
 
+.specify h1 {
+    margin-bottom: 1rem;
+}
+
 form {
     display: flex;
     flex-direction: column;
@@ -11,8 +15,33 @@ form {
 }
 
 .address input {
-    min-width: 500px;
+    width: 300px
 }
+
+.zip input {
+    width: 180px;
+}
+
+.utility select {
+    width: 300px;
+}
+
+.tariff select {
+    width: 300px;
+}
+
+.usage input {
+    width: 300px;
+}
+
+.solar select {
+    width: 300px;
+}
+
+.battery select {
+    width: 300px;
+}
+
 
 .submit {
     align-self: center

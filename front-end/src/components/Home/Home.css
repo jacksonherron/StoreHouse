@@ -1,16 +1,24 @@
 .homePage {
     align-self: flex-start;
-    padding: 5rem 7rem;
+    padding: 5rem 7rem 2rem 7rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     flex-grow: 2;
+    box-sizing: border-box;
+    max-width: 100%;
 }
 
 .deleteAccount {
     color: rgba(0, 0, 0, 0.5);
-    margin-left: 0.5rem;
     margin-top: 3rem;
+    margin-bottom: 0;
+}
+
+.deleteAccount:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    color: rgba(0, 0, 0, 0.7);
 }
 
 .properties-container {
@@ -23,20 +31,16 @@
 
 .property {
     margin: 15px;
+    width: 16rem;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
-.deleteAccount:hover {
-    cursor: pointer;
-    text-decoration: underline;
-    color: rgba(0, 0, 0, 0.7);
+.property:hover{
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
  
 .properties {
     margin-top: 2rem
-}
-
-.newProperty {
-    margin-top: 3rem;
 }
 
 .welcome {
@@ -59,8 +63,16 @@
     max-width: 800px;
 }
 
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
 
-
+.viewDetail {
+    align-self: center;
+}
 
 .properties h2 {
     color: rgba(0, 0, 0, 0.7);
@@ -70,22 +82,22 @@
 .newProperty h2 {
     color: rgba(0, 0, 0, 0.7);
     font-size: 1.5rem;
+    margin-top: 1.5rem
 }
 
-.begin {
+.begin, .viewDetail {
     background-color: #61BCF9!important;
     border-color: #61BCF9!important;
     margin: 0.5rem;
 }
 
-.begin:hover {
-    background-color: rgb(83, 162, 214)!important;
-    border-color: rgb(83, 162, 214)!important;
+.begin:hover, .viewDetail:hover {
+    cursor: pointer;
 }
 
 @media only screen and (max-width: 600px) {
     .homePage {
-        padding: 4rem 2rem;
+        padding: 4rem 2rem 1rem 2rem;
     }
 
     .welcome {
@@ -114,7 +126,7 @@
     }
     
     .newProperty {
-        margin-top: 5rem;
+        margin-top: 2rem;
     }
 
     .newProperty h2 {

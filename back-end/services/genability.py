@@ -306,9 +306,9 @@ GenabilityInterface = GenabilityApiInterface(app_id=auth["app_id"], app_key=auth
 #     ))
 
 # Residential Account
-providerAccountId = "4e6d4f43-a94f-478c-8201-12532c653b01"
-electricityProfileId = "4e6d4f43-a94f-478c-8201-12532c653b01-bills"
-solarProfileId = "5d7722728161887448ff265d"
+# providerAccountId = "4e6d4f43-a94f-478c-8201-12532c653b01"
+# electricityProfileId = "4e6d4f43-a94f-478c-8201-12532c653b01-bills"
+# solarProfileId = "5d7722728161887448ff265d"
 # Commercial Account 
 # providerAccountId = "3204f99c-a8e7-49b9-9658-9fcdd22d0893"
 
@@ -343,7 +343,7 @@ solarProfileId = "5d7722728161887448ff265d"
 # print(GenabilityInterface.calculate_baseline_costs(providerAccountId=providerAccountId))
 
 # Test RETRIEVE_NET_HOURLY_PROFILE - PASSED
-print(GenabilityInterface.retrieve_net_hourly_profile(providerAccountId=providerAccountId, solarProfileId=solarProfileId))
+# print(GenabilityInterface.retrieve_net_hourly_profile(providerAccountId=providerAccountId, solarProfileId=solarProfileId))
 
 # Test GET_PROFILE
 # print(GenabilityInterface.get_profile(profile_id=electricityProfileId))

@@ -5,8 +5,7 @@ import Form from 'react-bootstrap/Form'
 const Stage6 = ({ handleChange, handleSubmit, handleChangeStage, battery_system }) => {
     return(
         <>
-            <h3>Battery System Specification</h3>
-            <div className="form-group">
+            <div className="form-group battery">
                 <label htmlFor="battery_system">Battery System</label>
                 <Form.Control name="battery_system" value={battery_system} onChange={handleChange} as="select" className="form-control form-control-lg">
                     <option value="1" >Tesla Powerwall (14 kWh, 5 kW)</option>

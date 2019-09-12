@@ -25,11 +25,11 @@ class Home extends Component {
         const currentUser = JSON.parse(this.props.currentUser);
         axios.get(
             `${API_URL}/property`,
+            { withCredentials: true },
             {params: {
                     user_id: currentUser.id
                 }
             },
-            { withCredentials: true },
             { headers: {
                     "Access-Control-Allow-Origin": "*"
                 } 
@@ -69,19 +69,23 @@ class Home extends Component {
                     <h1><span className="username">{currentUser && currentUser.first_name} {currentUser && currentUser.last_name}</span> ,</h1>
                 </div>
                 <div className="properties">
-                <h2 className="">Your Properties</h2>
+                <h2>Your Properties</h2>
                     <div className="properties-container">
-                        {this.state.properties && this.state.properties.map((property, i) => (
-                            <Card style={{ width: '18rem' }} key={i}>
-                                <Card.Body>
-                                <Card.Title>{property.property_name}</Card.Title>
-                                <Card.Text>
-                                    {property.city}
-                                </Card.Text>
-                                <Button className="begin">View detail</Button>
-                                </Card.Body>
-                            </Card>
-                        ))}
+                        {this.state.properties.length ?
+                            this.state.properties.map((property, i) => (
+                                <Card key={i} className="property">
+                                    <Card.Body>
+                                    <Card.Title>{property.property_name}</Card.Title>
+                                    <Card.Text>
+                                        {property.city}<br/>
+                                        {property.zipcode}<br/>
+                                    </Card.Text>
+                                    <Button className="viewDetail">View detail</Button>
+                                    </Card.Body>
+                                </Card>
+                            )) :
+                            <div>You haven't added any properties yet...</div>
+                        }
                     </div>
                 </div>
                 <div className="newProperty">

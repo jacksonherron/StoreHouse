@@ -1,20 +1,21 @@
 import os
 import json
-
+from functools import wraps
 from flask import Flask, flash, request, redirect, jsonify
 from flask_login import LoginManager, current_user, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_cors import CORS
 from flask import jsonify
+ 
+from services.genability import GenabilityApiInterface, auth
 
-
+# Init Flask
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
+# Configure Database
 basedir = os.path.abspath(os.path.dirname(__file__))
-
-# Setup Database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'db.StoreHouse')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = "thisismydeepestdarkestsecret"
@@ -28,9 +29,8 @@ marshmallow = Marshmallow(app)
 # Init Flask Login
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
 
-# Exception class
+# Custom exception class
 class InvalidUsage(Exception):
     status_code = 400
 
@@ -45,6 +45,17 @@ class InvalidUsage(Exception):
         res = dict(self.payload or ())
         res['errors'] = self.errors
         return res
+
+# Login required
+def login_required(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        print(current_user)
+        if current_user.is_authenticated:
+            return f(*args, **kwargs)
+        else:
+            raise InvalidUsage(["You must be logged in to access this route."])
+    return wrap
 
  ### ------------------ ROUTES ------------------ ###
 
@@ -87,13 +98,12 @@ def login():
     email = request.json['email']
     password = request.json['password']
     authenticated_user = User.login(email, password)
-
     if authenticated_user is None:
         raise InvalidUsage(["The email and password do not match a record. Please try again."])
     return authenticated_user
 
-
 @app.route('/logout', methods=['GET'])
+@login_required
 def logout():
     logout_user()
     return {"status": 200, "message": "Successfully logged out"}
@@ -101,6 +111,7 @@ def logout():
 
 @app.route('/user', methods=['GET'])
 @app.route('/user/<user_id>', methods=['GET', 'DELETE'])
+@login_required
 def get_or_delete_user(user_id=None):
     from models import User
     if user_id == None and request.method == 'GET':
@@ -114,7 +125,9 @@ def get_or_delete_user(user_id=None):
         raise InvalidUsage('Something went wrong please try again.')
     return confirmation
 
+
 @app.route('/specify', methods=['POST'])
+@login_required
 def create_property():
     from models import Property
     property_name = request.json['property_name']
@@ -138,6 +151,7 @@ def create_property():
 
 @app.route('/property', methods=['GET'])
 @app.route('/property/<property_id>', methods=['GET'])
+@login_required
 def get_property(property_id=None):
     from models import Property
     if property_id == None:

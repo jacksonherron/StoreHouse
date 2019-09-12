@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form'
 const Stage2 = ({ handleChange, handleChangeStage, utility }) => {
     return(
         <>
-            <div className="form-group">
+            <div className="form-group utility">
                 <label htmlFor="utility">Utility</label>
                 <Form.Control name="utility" value={utility} onChange={handleChange} as="select" className="form-control form-control-lg">
                     <option value="PGE" >Pacific Gas & Electric</option>

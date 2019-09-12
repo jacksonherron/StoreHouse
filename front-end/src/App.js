@@ -7,7 +7,6 @@ import Routes from './config/routes'
 import Footer from './components/Footer/Footer'
 import API_URL from './constants';
 
-
 class App extends Component {
   state = {
     currentUser: localStorage.getItem('user'),

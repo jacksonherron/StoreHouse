@@ -5,8 +5,7 @@
 }
 
 .modalOpen:hover {
-    background-color: rgb(83, 162, 214)!important;
-    border-color: rgb(83, 162, 214)!important;
+    cursor: pointer;
 }
 
 .alert {

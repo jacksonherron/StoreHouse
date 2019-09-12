@@ -2,7 +2,7 @@ from app import db, marshmallow, login_manager, InvalidUsage
 from flask import jsonify
 from sqlalchemy.orm import validates
 from datetime import datetime
-from flask_login import UserMixin, login_user, logout_user
+from flask_login import UserMixin, current_user, login_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -45,7 +45,7 @@ class User(db.Model, UserMixin):
         user = User.query.filter_by(email=email).first()
         if user is None or not user.check_password(password):
             return None
-        login_user(user, remember=True)
+        login_user(user)
         return user_schema.jsonify(user)
 
     @classmethod
@@ -160,7 +160,7 @@ class Property(db.Model):
 
 class PropertySchema(marshmallow.Schema):
     class Meta:
-        fields = ('property_name', 'address_line_1', 'address_line_2', 'city', 'zipcode', 'utility', 'tariff', 'month_1_usage', 'month_2_usage', 'month_3_usage', 'solar_system_kw', 'solar_system_dir', 'solar_system_tilt', 'battery_system', 'monthly_savings', 'payback_period', 'user_id')
+        fields = ('property_name', 'address_line_1', 'address_line_2', 'city', 'zipcode', 'utility', 'tariff', 'month_1_usage', 'month_2_usage', 'month_3_usage', 'solar_system_kw', 'solar_system_dir', 'solar_system_tilt', 'battery_system', 'monthly_savings', 'payback_period', 'user_id', 'timestamp')
 
 property_schema = PropertySchema()
 properties_schema = PropertySchema(many=True)
