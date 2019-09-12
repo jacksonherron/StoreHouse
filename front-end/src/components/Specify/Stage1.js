@@ -1,7 +1,8 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form'
 
-const Stage1 = ({ handleChange, handleChangeStage, property_name, address_line_1, address_line_2, city, zipcode }) => {
+const Stage1 = ({ handleChange, handleSubmit1, property_name, address_line_1, address_line_2, city, zipcode, customer_class }) => {
     return(
         <>
             <div className="form-group address">
@@ -24,7 +25,14 @@ const Stage1 = ({ handleChange, handleChangeStage, property_name, address_line_1
                 <label htmlFor="zipcode">Zip Code</label>
                 <input type="text" id="zipcode" name="zipcode" value={zipcode} onChange={handleChange} className="form-control form-control-lg" />
             </div>
-            <Button id="next" variant="secondary" onClick={handleChangeStage}>Next</Button>
+            <div className="form-group utility">
+            <label htmlFor="utility">Utility</label>
+                <Form.Control name="customer_class" value={customer_class} onChange={handleChange} as="select" className="form-control form-control-lg">
+                    <option value="residential" >Residential</option>
+                    <option value="commercial" >Commercial</option>
+                </Form.Control>
+            </div>
+            <Button id="next" variant="secondary" onClick={handleSubmit1}>Next</Button>
         </>
     );
 };

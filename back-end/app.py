@@ -6,7 +6,6 @@ from flask_login import LoginManager, current_user, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_cors import CORS
-from flask import jsonify
  
 from services.genability import GenabilityApiInterface, auth
 
@@ -30,6 +29,9 @@ marshmallow = Marshmallow(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+# Init Genability API Interface
+GenabilityInterface = GenabilityApiInterface(auth["app_id"], auth["app_key"])
+
 # Custom exception class
 class InvalidUsage(Exception):
     status_code = 400
@@ -50,7 +52,6 @@ class InvalidUsage(Exception):
 def login_required(f):
     @wraps(f)
     def wrap(*args, **kwargs):
-        print(current_user)
         if current_user.is_authenticated:
             return f(*args, **kwargs)
         else:
@@ -125,29 +126,65 @@ def get_or_delete_user(user_id=None):
         raise InvalidUsage('Something went wrong please try again.')
     return confirmation
 
-
 @app.route('/specify', methods=['POST'])
+@app.route('/specify/<step>', methods=['POST', 'GET'])
 @login_required
-def create_property():
+def create_property(step=None):
     from models import Property
-    property_name = request.json['property_name']
-    address_line_1 = request.json['address_line_1']
-    address_line_2 = request.json['address_line_2']
-    city = request.json['city']
-    zipcode = request.json['zipcode']
-    utility = request.json['utility']
-    tariff = request.json['tariff']
-    month_1_usage = request.json['month_1_usage']
-    month_2_usage = request.json['month_2_usage']
-    month_3_usage = request.json['month_3_usage']
-    solar_system_kw = request.json['solar_system_kw']
-    solar_system_dir = request.json['solar_system_dir']
-    solar_system_tilt = request.json['solar_system_tilt']
-    battery_system = request.json['battery_system']
-    monthly_savings = request.json['monthly_savings']
-    payback_period = request.json['payback_period']
-    user_id = request.json['user_id']
-    return Property.create_property(property_name, address_line_1, address_line_2, city, zipcode, utility, tariff, month_1_usage, month_2_usage, month_3_usage, solar_system_kw, solar_system_dir, solar_system_tilt, battery_system, monthly_savings, payback_period, user_id)
+    if step is not None:
+        if step == "1":
+            property_name = request.json['property_name']
+            address_line_1 = request.json['address_line_1']
+            address_line_2 = request.json['address_line_2']
+            city = request.json['city']
+            zipcode = request.json['zipcode']
+            customer_class = request.json['customer_class']
+            user_id = request.json['user_id']
+            new_account = GenabilityInterface.create_account(
+                account_name = property_name,
+                address1 = address_line_1,
+                address2 = address_line_2,
+                city = city,
+                zipcode = zipcode,
+                country="US",
+                customer_class=customer_class,
+            )
+            account = json.loads(new_account)
+            provider_account_id = account["results"][0]["providerAccountId"]
+            created_property = Property.create_property(property_name, address_line_1, address_line_2, city, zipcode, provider_account_id, user_id)
+            utilities = GenabilityInterface.get_utilities(zipcode)
+            return utilities
+        if step == "2":
+            # print(GenabilityInterface.set_utility(providerAccountId=providerAccountId, lseId=734))
+            return
+        if step == "3":
+            return
+        if step == "4":
+            return
+        if step == "5":
+            return
+        if step == "6":
+            return
+    else:
+        from models import Property
+        property_name = request.json['property_name']
+        address_line_1 = request.json['address_line_1']
+        address_line_2 = request.json['address_line_2']
+        city = request.json['city']
+        zipcode = request.json['zipcode']
+        utility = request.json['utility']
+        tariff = request.json['tariff']
+        month_1_usage = request.json['month_1_usage']
+        month_2_usage = request.json['month_2_usage']
+        month_3_usage = request.json['month_3_usage']
+        solar_system_kw = request.json['solar_system_kw']
+        solar_system_dir = request.json['solar_system_dir']
+        solar_system_tilt = request.json['solar_system_tilt']
+        battery_system = request.json['battery_system']
+        monthly_savings = request.json['monthly_savings']
+        payback_period = request.json['payback_period']
+        user_id = request.json['user_id']
+        return Property.create_property(property_name, address_line_1, address_line_2, city, zipcode, utility, tariff, month_1_usage, month_2_usage, month_3_usage, solar_system_kw, solar_system_dir, solar_system_tilt, battery_system, monthly_savings, payback_period, user_id)
 
 @app.route('/property', methods=['GET'])
 @app.route('/property/<property_id>', methods=['GET'])

@@ -18,7 +18,9 @@ class Specify extends Component {
         address_line_2: '', 
         city: '',
         zipcode: '',
-        utility: 'PGE',
+        customer_class: 'residential',
+        utilities: [],
+        utility: '',
         tariff: 'E1',
         month_1_usage: '',
         month_2_usage: '',
@@ -54,6 +56,34 @@ class Specify extends Component {
         }
     }
     
+    handleSubmit1 = () => {
+        const currentUser = JSON.parse(this.props.currentUser);
+        const new_property = {
+            property_name: this.state.property_name,
+            address_line_1: this.state.address_line_1,
+            address_line_2: this.state.address_line_2,
+            city: this.state.city,
+            zipcode: this.state.zipcode,
+            customer_class: this.state.customer_class,
+            user_id: currentUser.id
+        }
+        axios.post(
+            `${API_URL}/specify/1`, 
+            new_property,
+            { withCredentials: true },
+            { headers: {
+                "Access-Control-Allow-Origin": "*"
+                } 
+            })
+            .then(res => {
+                this.setState({
+                    stage: this.state.stage + 1
+                });
+                console.log(res);
+            })
+            .catch(err => this.setState({ errors:err.response.data.errors }));
+    }
+
     handleSubmit = (event) => {
         const currentUser = JSON.parse(this.props.currentUser);
         const new_property = {
@@ -75,7 +105,8 @@ class Specify extends Component {
             payback_period: 5.67,
             user_id: currentUser.id,
         }
-        axios.post(`${API_URL}/specify`, 
+        axios.post(
+            `${API_URL}/specify`, 
             new_property,
             { withCredentials: true },
             { headers: {
@@ -107,12 +138,12 @@ class Specify extends Component {
                         </Alert>
                     ))}
                     <form>
-                        { this.state.stage===1 && <Stage1 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} property_name={this.state.property_name} address_line_1={this.state.address_line_1} address_line_2={this.state.address_line_2} city={this.state.city} zipcode={this.state.zipcode}/> }
-                        { this.state.stage===2 && <Stage2 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} utility={this.state.utility}/> }
-                        { this.state.stage===3 && <Stage3 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} tariff={this.state.tariff}/> }
-                        { this.state.stage===4 && <Stage4 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} month_1_usage={this.state.month_1_usage} month_2_usage={this.state.month_2_usage} month_3_usage={this.state.month_3_usage}/> }
-                        { this.state.stage===5 && <Stage5 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} solar_system_kw={this.state.solar_system_kw} solar_system_dir={this.state.solar_system_dir} solar_system_tilt={this.state.solar_system_tilt} /> }
-                        { this.state.stage===6 && <Stage6 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} handleSubmit={this.handleSubmit} battery_system={this.state.battery_system}/> }
+                        { this.state.stage===1 && <Stage1 handleChange={this.handleChange} handleSubmit1={this.handleSubmit1}/> }
+                        { this.state.stage===2 && <Stage2 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} /> }
+                        { this.state.stage===3 && <Stage3 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} /> }
+                        { this.state.stage===4 && <Stage4 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} /> }
+                        { this.state.stage===5 && <Stage5 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} /> }
+                        { this.state.stage===6 && <Stage6 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} /> }
                     </form>
                 </div>
             </div>

@@ -292,7 +292,7 @@ class GenabilityApiInterface():
 
 ######### TESTING ########
 
-GenabilityInterface = GenabilityApiInterface(app_id=auth["app_id"], app_key=auth["app_key"])
+# GenabilityInterface = GenabilityApiInterface(app_id=auth["app_id"], app_key=auth["app_key"])
 
 # # TEST CREATE_ACCOUNT PASSED
 # print(GenabilityInterface.create_account(

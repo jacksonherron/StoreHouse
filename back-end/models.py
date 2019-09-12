@@ -54,6 +54,7 @@ class User(db.Model, UserMixin):
         try:
             db.session.add(new_user)
             db.session.commit()
+            login_user(new_user)
         except:
             db.session.rollback()
             raise
@@ -99,42 +100,34 @@ class Property(db.Model):
     address_line_2 = db.Column(db.String(300), nullable=False)
     city = db.Column(db.String(100), nullable=False)
     zipcode = db.Column(db.String(100), nullable=False)
-    utility = db.Column(db.String(300), nullable=False)
-    tariff = db.Column(db.String(100), nullable=False)
-    month_1_usage = db.Column(db.String(100), nullable=False)
-    month_2_usage = db.Column(db.String(100), nullable=False)
-    month_3_usage = db.Column(db.String(100), nullable=False)
-    solar_system_kw = db.Column(db.String(100), nullable=False)
-    solar_system_dir = db.Column(db.String(100), nullable=False)
-    solar_system_tilt = db.Column(db.String(100), nullable=False)
-    battery_system = db.Column(db.String(100), nullable=False)
-    monthly_savings = db.Column(db.Float, nullable=False)
-    payback_period = db.Column(db.Float, nullable=False)
+    provider_account_id = db.Column(db.String(100), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    utility = db.Column(db.String(300), nullable=True)
+    tariff = db.Column(db.String(100), nullable=True)
+    month_1_usage = db.Column(db.String(100), nullable=True)
+    month_2_usage = db.Column(db.String(100), nullable=True)
+    month_3_usage = db.Column(db.String(100), nullable=True)
+    solar_system_kw = db.Column(db.String(100), nullable=True)
+    solar_system_dir = db.Column(db.String(100), nullable=True)
+    solar_system_tilt = db.Column(db.String(100), nullable=True)
+    battery_system = db.Column(db.String(100), nullable=True)
+    monthly_savings = db.Column(db.Float, nullable=True)
+    payback_period = db.Column(db.Float, nullable=True)
+    is_complete = db.Column(db.Boolean, nullable=False, default=False)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-    def __init__(self, property_name, address_line_1, address_line_2, city, zipcode, utility, tariff, month_1_usage, month_2_usage, month_3_usage, solar_system_kw, solar_system_dir, solar_system_tilt, battery_system, monthly_savings, payback_period, user_id):
+    def __init__(self, property_name, address_line_1, address_line_2, city, zipcode, provider_account_id, user_id):
         self.property_name = property_name
         self.address_line_1 = address_line_1
         self.address_line_2 = address_line_2
         self.city = city
         self.zipcode = zipcode
-        self.utility = utility
-        self.tariff = tariff
-        self.month_1_usage = month_1_usage
-        self.month_2_usage = month_2_usage
-        self.month_3_usage = month_3_usage
-        self.solar_system_kw = solar_system_kw
-        self.solar_system_dir = solar_system_dir
-        self.solar_system_tilt = solar_system_tilt
-        self.battery_system = battery_system
-        self.monthly_savings = monthly_savings
-        self.payback_period = payback_period
+        self.provider_account_id = provider_account_id
         self.user_id = user_id
 
     @classmethod
-    def create_property(cls, property_name, address_line_1, address_line_2, city, zipcode, utility, tariff, month_1_usage, month_2_usage, month_3_usage, solar_system_kw, solar_system_dir, solar_system_tilt, battery_system, monthly_savings, payback_period, user_id):
-        new_property = Property(property_name, address_line_1, address_line_2, city, zipcode, utility, tariff, month_1_usage, month_2_usage, month_3_usage, solar_system_kw, solar_system_dir, solar_system_tilt, battery_system, monthly_savings, payback_period, user_id)
+    def create_property(cls, property_name, address_line_1, address_line_2, city, zipcode, provider_account_id, user_id):
+        new_property = Property(property_name, address_line_1, address_line_2, city, zipcode, provider_account_id, user_id)
         try:
             db.session.add(new_property)
             db.session.commit()
@@ -160,7 +153,7 @@ class Property(db.Model):
 
 class PropertySchema(marshmallow.Schema):
     class Meta:
-        fields = ('property_name', 'address_line_1', 'address_line_2', 'city', 'zipcode', 'utility', 'tariff', 'month_1_usage', 'month_2_usage', 'month_3_usage', 'solar_system_kw', 'solar_system_dir', 'solar_system_tilt', 'battery_system', 'monthly_savings', 'payback_period', 'user_id', 'timestamp')
+        fields = ('property_name', 'address_line_1', 'address_line_2', 'city', 'zipcode', 'provider_account_id', 'user_id', 'utility', 'tariff', 'month_1_usage', 'month_2_usage', 'month_3_usage', 'solar_system_kw', 'solar_system_dir', 'solar_system_tilt', 'battery_system', 'monthly_savings', 'payback_period', 'timestamp')
 
 property_schema = PropertySchema()
 properties_schema = PropertySchema(many=True)

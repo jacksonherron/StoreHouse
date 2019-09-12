@@ -8,7 +8,7 @@ const Stage2 = ({ handleChange, handleChangeStage, utility }) => {
             <div className="form-group utility">
                 <label htmlFor="utility">Utility</label>
                 <Form.Control name="utility" value={utility} onChange={handleChange} as="select" className="form-control form-control-lg">
-                    <option value="PGE" >Pacific Gas & Electric</option>
+                    <option defaultValue="PGE" >Pacific Gas & Electric</option>
                     <option value="SCE" >Southern California Edison</option>
                 </Form.Control>
             </div>
