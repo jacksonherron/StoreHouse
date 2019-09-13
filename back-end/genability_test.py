@@ -1,4 +1,4 @@
-from genability import auth, GenabilityApiInterface
+from services.genability import auth, GenabilityApiInterface
 
 GenabilityInterface = GenabilityApiInterface(auth["app_id"], auth["app_key"])
 

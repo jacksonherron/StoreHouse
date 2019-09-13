@@ -30,7 +30,6 @@ const Stage5 = ({ handleChange, handleChangeStage, solar_system_kw, solar_system
                     <option value="40">40</option>
                 </Form.Control>
             </div>
-            <Button id="previous" variant="secondary" onClick={handleChangeStage}>Previous</Button>
             <Button id="next" variant="secondary" onClick={handleChangeStage}>Next</Button>
         </>
     );

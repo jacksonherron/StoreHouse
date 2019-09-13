@@ -153,7 +153,7 @@ def create_property(step=None):
             provider_account_id = account["results"][0]["providerAccountId"]
             created_property = Property.create_property(property_name, address_line_1, address_line_2, city, zipcode, provider_account_id, user_id)
             utilities = GenabilityInterface.get_utilities(zipcode)
-            return utilities
+            return json.loads(utilities)
         if step == "2":
             # print(GenabilityInterface.set_utility(providerAccountId=providerAccountId, lseId=734))
             return

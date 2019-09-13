@@ -13,7 +13,6 @@ const Stage3 = ({ handleChange, handleChangeStage, tariff }) => {
                     <option value="E2">E2</option>
                 </Form.Control>
             </div>
-            <Button id="previous" variant="secondary" onClick={handleChangeStage}>Previous</Button>
             <Button id="next" variant="secondary" onClick={handleChangeStage}>Next</Button>
         </>
     );

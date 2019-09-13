@@ -10,6 +10,7 @@ import Stage3 from './Stage3';
 import Stage4 from './Stage4';
 import Stage5 from './Stage5';
 import Stage6 from './Stage6';
+import { thisTypeAnnotation } from '@babel/types';
 
 class Specify extends Component {
     state = {
@@ -42,20 +43,12 @@ class Specify extends Component {
         };
 
     handleChangeStage = (event) => {
-        if (event.target.id === "next") {
-            if (this.state.stage === 6) {
-                return
-            }
-            this.setState({ stage: this.state.stage + 1})
+        if (this.state.stage === 6) {
+            return
         }
-        if (event.target.id === "previous") {
-            if (this.state.stage === 1) {
-                return
-            }
-            this.setState({ stage: this.state.stage - 1})
-        }
+        return this.setState({ stage: this.state.stage + 1})
     }
-    
+
     handleSubmit1 = () => {
         const currentUser = JSON.parse(this.props.currentUser);
         const new_property = {
@@ -76,12 +69,13 @@ class Specify extends Component {
                 } 
             })
             .then(res => {
+                console.log(res)
                 this.setState({
-                    stage: this.state.stage + 1
+                    stage: this.state.stage + 1,
+                    utilities: res.data.results
                 });
-                console.log(res);
             })
-            .catch(err => this.setState({ errors:err.response.data.errors }));
+            .catch(err => console.log(err));
     }
 
     handleSubmit = (event) => {
@@ -139,7 +133,7 @@ class Specify extends Component {
                     ))}
                     <form>
                         { this.state.stage===1 && <Stage1 handleChange={this.handleChange} handleSubmit1={this.handleSubmit1}/> }
-                        { this.state.stage===2 && <Stage2 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} /> }
+                        { this.state.stage===2 && <Stage2 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} utility={this.state.utility} utilities={this.state.utilities} /> }
                         { this.state.stage===3 && <Stage3 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} /> }
                         { this.state.stage===4 && <Stage4 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} /> }
                         { this.state.stage===5 && <Stage5 handleChange={this.handleChange} handleChangeStage={this.handleChangeStage} /> }

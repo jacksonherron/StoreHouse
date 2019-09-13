@@ -113,7 +113,6 @@ class Property(db.Model):
     battery_system = db.Column(db.String(100), nullable=True)
     monthly_savings = db.Column(db.Float, nullable=True)
     payback_period = db.Column(db.Float, nullable=True)
-    is_complete = db.Column(db.Boolean, nullable=False, default=False)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __init__(self, property_name, address_line_1, address_line_2, city, zipcode, provider_account_id, user_id):

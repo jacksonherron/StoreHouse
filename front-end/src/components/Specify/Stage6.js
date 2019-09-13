@@ -12,7 +12,6 @@ const Stage6 = ({ handleChange, handleSubmit, handleChangeStage, battery_system 
                     <option value="2" >LG Chem RESU (10 kWh, 5 kW)</option>
                 </Form.Control>
             </div>
-            <Button id="previous" variant="secondary" onClick={handleChangeStage}>Previous</Button>
             <Button id="submit" variant="primary" onClick={handleSubmit}>Submit</Button>
         </>
     );

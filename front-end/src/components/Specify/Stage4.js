@@ -16,7 +16,6 @@ const Stage4 = ({ handleChange, handleChangeStage, month_1_usage, month_2_usage,
                 <label htmlFor="month_3_usage">Month 3 (kWh)</label>
                 <input type="text" id="month_3_usage" name="month_3_usage" value={month_3_usage} onChange={handleChange} className="form-control form-control-lg" />
             </div>
-            <Button id="previous" variant="secondary" onClick={handleChangeStage}>Previous</Button>
             <Button id="next" variant="secondary" onClick={handleChangeStage}>Next</Button>
         </>
     );
