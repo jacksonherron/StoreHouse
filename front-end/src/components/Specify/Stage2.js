@@ -2,7 +2,7 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-const Stage2 = ({ handleChange, handleChangeStage, utility, utilities }) => {      
+const Stage2 = ({ handleChange, handleSubmit2, utility, utilities }) => {      
     let options = []
     
     utilities.forEach((u, i) => {
@@ -17,7 +17,7 @@ const Stage2 = ({ handleChange, handleChangeStage, utility, utilities }) => {
                     {options}
                 </Form.Control>
             </div>
-            <Button id="next" variant="secondary" onClick={handleChangeStage}>Next</Button>
+            <Button id="next" variant="secondary" onClick={handleSubmit2}>Next</Button>
         </>
     );
 };

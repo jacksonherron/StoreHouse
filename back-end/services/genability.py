@@ -53,7 +53,7 @@ class GenabilityApiInterface():
             city,
             zipcode,
             country="US",
-            customer_class = "residential",
+            customer_class="residential",
         ):
 
         account_uuid = str(uuid.uuid4())
@@ -190,7 +190,7 @@ class GenabilityApiInterface():
 
 
      # Creates a solar energy production profile given input data. Direction is either EAST, SOUTH, or WEST. Size is the kW capacity of the system, represented as a string.
-    def create_solar_profile(self, providerAccountId, direction: str, system_size: str):
+    def create_solar_profile(self, providerAccountId, direction: str, system_size: str, tilt: str):
         endpoint_url = f'/v1/profiles'
         azimuthConversion = {
             "EAST": "90",
@@ -201,7 +201,7 @@ class GenabilityApiInterface():
         api_body = {
             "providerAccountId" : providerAccountId,
             "providerProfileId" : f'{providerAccountId}-pvwatts',
-            "groupBy" : "HOUR",
+            "groupBy" : "YEAR",
             "serviceTypes" : "SOLAR_PV",
             "source": {
                 "sourceId":"PVWatts",
@@ -226,26 +226,52 @@ class GenabilityApiInterface():
                 },
                 "tilt" : {
                 "keyName" : "tilt",
-                "dataValue" : "20"
+                "dataValue" : tilt
                 }
             }
         }
         api_response = self.send_api_request(endpoint_url=endpoint_url, rest_verb="PUT", data=api_body)
         return json.dumps(api_response, indent=4)
 
+    # Retrieves electricity consumption 8760 data 
+    def get_electricity_profile(self, profile_id):
+        endpoint_url = f"profiles/pid/{profile_id}/?populateIntervals=true&groupBy=HOUR"
+        api_body = {
+            "fromDateTime": "2019-09-01T00:00:00", 
+            "toDateTime": "2020-08-31T00:00:00", 
+            "useIntelligentBaselining": "true",
+            "populateReadings": "true",
+            "autoBaseline": "true",
+            "detailLevel": "CHARGE_TYPE_AND_TOU",
+            "fields": "EXT",
+        }
+        api_response = self.send_api_request(endpoint_url, 'GET', api_body)
+        return json.dumps(api_response, indent=4)
+
+    # Retrieves solar production 8760 data 
+    def get_solar_profile(self, profile_id):
+        endpoint_url = f"profiles/pid/{profile_id}/?populateIntervals=true&groupBy=HOUR"
+        api_body = {
+            "fromDateTime": "2019-09-01T00:00:00", 
+            "toDateTime": "2020-08-31T00:00:00",
+            "populateBaseline": "true",
+            "fields": "EXT",
+        }
+        api_response = self.send_api_request(endpoint_url, 'GET', api_body)
+        return json.dumps(api_response, indent=4)
 
     # Calculates baseline annual cost of electricity without solar or storage
     def calculate_baseline_costs(self, providerAccountId):
         endpoint_url = f'/v1/accounts/pid/{providerAccountId}/calculate/'
         api_body = { 
             "fromDateTime": "2019-09-01T00:00:00", 
-            "toDateTime": "2020-09-31T00:00:00", 
+            "toDateTime": "2020-08-31T00:00:00",
             "useIntelligentBaselining": "true", 
             "includeDefaultProfile": "true",
             "autoBaseline": "true", 
             "minimums": "false", 
             "detailLevel": "CHARGE_TYPE", 
-            "groupBy": "Hour", 
+            "groupBy": "HOUR", 
             "fields": "EXT"
         }
         api_response = self.send_api_request(endpoint_url=endpoint_url, rest_verb="POST", data=api_body)
@@ -255,7 +281,7 @@ class GenabilityApiInterface():
     # Retrieves the net hourly profile of electricity consumption minus production from solar, and calculates yearly savings
     def retrieve_net_hourly_profile(self, providerAccountId, solarProfileId):
         endpoint_url = f'/v1/accounts/pid/{providerAccountId}/calculate/'
-        api_body = {       
+        api_body = {
             "fromDateTime": "2019-09-01T00:00:00", 
             "toDateTime": "2020-08-31T00:00:00", 
             "useIntelligentBaselining": "true", 
@@ -272,22 +298,6 @@ class GenabilityApiInterface():
             }]
         }
         api_response = self.send_api_request(endpoint_url=endpoint_url, rest_verb="POST", data=api_body)
-        return json.dumps(api_response, indent=4)
-
-
-    # Retrieves hourly electricity consumption/production from a previously create profile 
-    def get_profile(self, profile_id):
-        endpoint_url = f"profiles/pid/{profile_id}/?populateIntervals=true&groupBy=HOUR"
-        api_body = {
-            "fromDateTime": "2019-09-01T00:00:00", 
-            "toDateTime": "2020-08-31T00:00:00", 
-            "useIntelligentBaselining": "true",
-            "populateReadings": "true",
-            "autoBaseline": "true",
-            "detailLevel": "CHARGE_TYPE_AND_TOU",
-            "fields": "EXT",
-        }
-        api_response = self.send_api_request(endpoint_url, 'GET', api_body)
         return json.dumps(api_response, indent=4)
 
 ######### TESTING ########
@@ -339,14 +349,14 @@ class GenabilityApiInterface():
 # Test CREATE_SOLAR_PROFILE - PASSED
 # print(GenabilityInterface.create_solar_profile(providerAccountId=providerAccountId, direction="SOUTH", system_size="3"))
 
+# Test GET_ELECTRICITY_PROFILE
+# print(GenabilityInterface.get_electricity_profile(profile_id=electricityProfileId))
+
+# Test GET_SOLAR_PROFILE
+# print(GenabilityInterface.get_solar_profile(profile_id=solarProfileId))
+
 # Test CALCULATE_BASELINE_COSTS - PASSED
 # print(GenabilityInterface.calculate_baseline_costs(providerAccountId=providerAccountId))
 
 # Test RETRIEVE_NET_HOURLY_PROFILE - PASSED
 # print(GenabilityInterface.retrieve_net_hourly_profile(providerAccountId=providerAccountId, solarProfileId=solarProfileId))
-
-# Test GET_PROFILE
-# print(GenabilityInterface.get_profile(profile_id=electricityProfileId))
-
-# Test RETRIEVE_HOURLY_SOLAR
-# print(GenabilityInterface.retrieve_hourly_solar(providerAccountId=providerAccountId))

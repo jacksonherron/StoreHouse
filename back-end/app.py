@@ -131,38 +131,76 @@ def get_or_delete_user(user_id=None):
 @login_required
 def create_property(step=None):
     from models import Property
+
     if step is not None:
         if step == "1":
-            property_name = request.json['property_name']
-            address_line_1 = request.json['address_line_1']
-            address_line_2 = request.json['address_line_2']
-            city = request.json['city']
-            zipcode = request.json['zipcode']
-            customer_class = request.json['customer_class']
-            user_id = request.json['user_id']
-            new_account = GenabilityInterface.create_account(
-                account_name = property_name,
-                address1 = address_line_1,
-                address2 = address_line_2,
-                city = city,
-                zipcode = zipcode,
-                country="US",
-                customer_class=customer_class,
-            )
+            # property_name = request.json['property_name']
+            # address_line_1 = request.json['address_line_1']
+            # address_line_2 = request.json['address_line_2']
+            # city = request.json['city']
+            # zipcode = request.json['zipcode']
+            # customer_class = request.json['customer_class']
+            # user_id = request.json['user_id']
+            # ### Create a genability account
+            # new_account = GenabilityInterface.create_account(
+            #     account_name = property_name,
+            #     address1 = address_line_1,
+            #     address2 = address_line_2,
+            #     city = city,
+            #     zipcode = zipcode,
+            #     country="US",
+            #     customer_class=customer_class,
+            # )
+            new_account = GenabilityInterface.get_account(providerAccountId='49546fc5-7101-42d6-8ab4-539f855b4918')
             account = json.loads(new_account)
             provider_account_id = account["results"][0]["providerAccountId"]
-            created_property = Property.create_property(property_name, address_line_1, address_line_2, city, zipcode, provider_account_id, user_id)
-            utilities = GenabilityInterface.get_utilities(zipcode)
-            return json.loads(utilities)
+            ### Store account information in the local database
+            # created_property = Property.create_property(property_name, address_line_1, address_line_2, city, zipcode, provider_account_id, user_id)
+            ### Retrieve and return utilities associated with the account
+            utilities = GenabilityInterface.get_utilities('94103')
+            return ({"provider_account_id": provider_account_id, "utilities": utilities})
+
         if step == "2":
-            # print(GenabilityInterface.set_utility(providerAccountId=providerAccountId, lseId=734))
-            return
+            provider_account_id = request.json['provider_account_id']
+            lseId = request.json['lseId']
+            ### UpdateGenability and the local db
+            GenabilityInterface.set_utility(providerAccountId=provider_account_id, lseId=lseId)
+            Property.set_utility(provider_account_id=provider_account_id, value=lseId)
+            ### Retrieve and return tariffs associated with the account
+            tariffs = GenabilityInterface.get_tariffs(providerAccountId=provider_account_id)
+            return tariffs
+
         if step == "3":
-            return
+            provider_account_id = request.json['provider_account_id']
+            master_tariff_id = request.json['master_tariff_id']
+            ### Update Genability and the local db
+            response = GenabilityInterface.set_tariff(providerAccountId=provider_account_id, masterTariffId=master_tariff_id)
+            Property.set_tariff(provider_account_id=provider_account_id, value=master_tariff_id)
+            return response
+
         if step == "4":
-            return
+            provider_account_id = request.json['provider_account_id']
+            month_1_usage = request.json['month_1_usage']
+            month_2_usage = request.json['month_2_usage']
+            month_3_usage = request.json['month_3_usage']
+            ### Update Genability and the local db
+            response = GenabilityInterface.create_electricity_profile(providerAccountId=provider_account_id, bill_1=month_1_usage, bill_2=month_2_usage, bill_3=month_3_usage)
+            data = json.loads(response)
+            electricity_profile_id = data["results"][0]["providerProfileId"]
+            Property.set_electricity_profile(provider_account_id, month_1_usage, month_2_usage, month_3_usage, electricity_profile_id)
+            return response
+
         if step == "5":
-            return
+            provider_account_id = request.json['provider_account_id']
+            solar_system_kw = request.json['solar_system_kw']
+            solar_system_dir = request.json['solar_system_dir']
+            solar_system_tilt = request.json['solar_system_tilt']
+            response = GenabilityInterface.create_solar_profile(provider_account_id, solar_system_dir, solar_system_kw, solar_system_tilt)
+            data = json.loads(response)
+            solar_profile_id = data["results"][0]["providerProfileId"]
+            Property.set_solar_profile(provider_account_id, solar_system_dir, solar_system_kw, solar_system_tilt, solar_profile_id)
+            return response
+
         if step == "6":
             return
     else:

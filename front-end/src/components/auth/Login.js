@@ -30,10 +30,7 @@ class Login extends Component {
     axios.post(
       `${API_URL}/login`,
       userInfo,
-      { withCredentials: true },
-      { headers: {
-        "Access-Control-Allow-Origin": "*"
-      } }
+      { withCredentials: true }
       )
       .then(res => {
         this.props.handleShowLogin()

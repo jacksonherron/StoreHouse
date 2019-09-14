@@ -25,15 +25,11 @@ class Home extends Component {
         const currentUser = JSON.parse(this.props.currentUser);
         axios.get(
             `${API_URL}/property`,
-            { withCredentials: true },
-            {params: {
+            { withCredentials: true,
+            params: {
                     user_id: currentUser.id
                 }
-            },
-            { headers: {
-                    "Access-Control-Allow-Origin": "*"
-                } 
-            } 
+            }
         )
         .then((res) => {
             this.setState({properties: res.data});
@@ -46,11 +42,7 @@ class Home extends Component {
         const currentUser = JSON.parse(this.props.currentUser);
         axios.delete(
             `${API_URL}/user/${currentUser.id}`,
-            { withCredentials: true },
-            { headers: {
-                "Access-Control-Allow-Origin": "*"
-                } 
-            } 
+            { withCredentials: true }
         )
             .then(() => {
                 localStorage.removeItem('user');

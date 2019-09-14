@@ -34,10 +34,8 @@ class App extends Component {
   handleLogout = () => {
     localStorage.removeItem('user');
     axios.get(`${API_URL}/logout`, 
-      { withCredentials: true },
-      { headers: {
-        "Access-Control-Allow-Origin": "*"
-      } } )
+      { withCredentials: true }
+      )
       .then(() => {
         this.setState( {currentUser: null });
         this.props.history.push('/');

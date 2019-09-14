@@ -34,10 +34,7 @@ class Signup extends Component {
     axios.post(
       `${API_URL}/register`,
       new_user,
-      { withCredentials: true },
-      { headers: {
-        "Access-Control-Allow-Origin": "*"
-      } }
+      { withCredentials: true }
       )
       .then(res => {
         this.props.handleShowSignup()
