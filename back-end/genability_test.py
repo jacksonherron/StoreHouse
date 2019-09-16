@@ -49,14 +49,14 @@ genabilitySolarProfileId = "5d7c8e0681618874487006f7"
 # Test CREATE_SOLAR_PROFILE - PASSED
 # print(GenabilityInterface.create_solar_profile(providerAccountId=providerAccountId, direction="SOUTH", system_size="3", tilt="20"))
 
-# Test CALCULATE_BASELINE_COSTS - PASSED
-print(GenabilityInterface.calculate_baseline_costs(providerAccountId=providerAccountId))
-
-# Test RETRIEVE_NET_HOURLY_PROFILE - PASSED
-# print(GenabilityInterface.retrieve_net_hourly_profile(providerAccountId=providerAccountId, solarProfileId=genabilitySolarProfileId))
-
 # Test GET_ELECTRICITY_PROFILE
 # print(GenabilityInterface.get_electricity_profile(profile_id=electricityProfileId))
 
 # Test GET_SOLAR_PROFILE
 # print(GenabilityInterface.get_solar_profile(profile_id=solarProfileId))
+
+# Test CALCULATE_BASELINE_COSTS - PASSED
+# print(GenabilityInterface.calculate_baseline_costs(providerAccountId=providerAccountId))
+
+# Test RETRIEVE_NET_HOURLY_PROFILE - PASSED
+# print(GenabilityInterface.retrieve_net_hourly_profile(providerAccountId=providerAccountId, solarProfileId=genabilitySolarProfileId))

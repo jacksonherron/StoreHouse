@@ -240,9 +240,8 @@ class GenabilityApiInterface():
             "fromDateTime": "2019-09-01T00:00:00", 
             "toDateTime": "2020-08-31T00:00:00", 
             "useIntelligentBaselining": "true",
-            "populateReadings": "true",
             "autoBaseline": "true",
-            "detailLevel": "CHARGE_TYPE_AND_TOU",
+            "populateReadings": "true",
             "fields": "EXT",
         }
         api_response = self.send_api_request(endpoint_url, 'GET', api_body)

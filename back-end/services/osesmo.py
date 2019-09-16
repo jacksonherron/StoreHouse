@@ -1,18 +1,19 @@
 import json
-with open('./profiles/hourly_profile.json', 'r') as f:
-    hourly_consumption = json.load(f)
-with open('./profiles/net_hourly_profile.json', 'r') as f:
-    net_hourly_profile = json.load(f)
+with open('./profiles/electricity_profile.json', 'r') as f:
+    electricity_profile = json.load(f)
+with open('./profiles/solar_profile.json', 'r') as f:
+    solar_profile = json.load(f)
 
-# annual_hourly_consumption = []
-# for hour in hourly_consumption["results"][0]["intervals"]["list"]:
-# 	annual_hourly_consumption.append(hour["kWh"]["quantityAmount"])
+hourly_electricity_profile = []
+for hour in electricity_profile["results"][0]["intervals"]["list"]:
+	hourly_electricity_profile.append(hour["kWh"]["quantityAmount"])
 
-print(annual_hourly_consumption)
+# print(hourly_electricity_profile)
+print(len(hourly_electricity_profile))
 
-# annual_hourly_solar = []
-# for hour in net_hourly_profile["results"][0]["items"]:
-#     if hour["quantityKey"] == "consumption" and 
-# 	annual_hourly_solar.append(-(hour["kWh"]["quantityAmount"]-annual_hourly_consumption[i]))
+hourly_solar_profile = []
+for hour in solar_profile["results"][0]["baselineMeasures"]:
+    hourly_solar_profile.append(hour["v"])
 
-# print(annual_hourly_solar)
+# print(hourly_solar_profile)
+print(len(hourly_solar_profile))
