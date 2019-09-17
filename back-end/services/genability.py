@@ -259,6 +259,20 @@ class GenabilityApiInterface():
         api_response = self.send_api_request(endpoint_url, 'GET', api_body)
         return json.dumps(api_response, indent=4)
 
+    # Sets solar production profile based on 8760 read data
+    def set_storage_profile(self, storage_profile, providerAccountId, storageProfileId):
+        endpoint_url = f'/v1/profiles'
+        api_body = { 
+                "providerAccountId" : providerAccountId,
+                "providerProfileId" : storageProfileId,
+                "profileName" : "Storage profile",
+                "serviceTypes" : "ELECTRICITY",
+                "sourceId" : "ReadingEntry",
+                "readingData" : storage_profile
+            }
+        api_response = self.send_api_request(endpoint_url=endpoint_url, rest_verb="POST", data=api_body)
+        return json.dumps(api_response, indent=4)
+
     # Calculates baseline annual cost of electricity without solar or storage
     def calculate_baseline_costs(self, providerAccountId):
         endpoint_url = f'/v1/accounts/pid/{providerAccountId}/calculate/'
@@ -270,15 +284,14 @@ class GenabilityApiInterface():
             "autoBaseline": "true", 
             "minimums": "false", 
             "detailLevel": "CHARGE_TYPE", 
-            "groupBy": "HOUR", 
+            "groupBy": "MONTH", 
             "fields": "EXT"
         }
         api_response = self.send_api_request(endpoint_url=endpoint_url, rest_verb="POST", data=api_body)
         return json.dumps(api_response, indent=4)
 
-
-    # Retrieves the net hourly profile of electricity consumption minus production from solar, and calculates yearly savings
-    def retrieve_net_hourly_profile(self, providerAccountId, solarProfileId):
+    # Calculates yearly costs for electricity with solar, but not storage
+    def calculate_solar_savings(self, providerAccountId, solarProfileId):
         endpoint_url = f'/v1/accounts/pid/{providerAccountId}/calculate/'
         api_body = {
             "fromDateTime": "2019-09-01T00:00:00", 
@@ -288,10 +301,10 @@ class GenabilityApiInterface():
             "autoBaseline": "true", 
             "minimums": "false", 
             "detailLevel": "CHARGE_TYPE_AND_TOU", 
-            "groupBy": "HOUR", 
+            "groupBy": "MONTH", 
             "fields": "EXT",
             "tariffInputs": [{
-                "keyName": "profileId",
+                "keyName": "providerProfileId",
                 "dataValue": solarProfileId,
                 "operator": "-"
             }]
@@ -299,63 +312,139 @@ class GenabilityApiInterface():
         api_response = self.send_api_request(endpoint_url=endpoint_url, rest_verb="POST", data=api_body)
         return json.dumps(api_response, indent=4)
 
-######### TESTING ########
+    # Calculates yearly costs for electricity with solar and storage
+    def calculate_solar_plus_storage_savings(self, providerAccountId, solarProfileId, storageProfileId):
+        endpoint_url = f'/v1/accounts/pid/{providerAccountId}/calculate/'
+        api_body = { 
+            "fromDateTime": "2019-09-01T00:00:00", 
+            "toDateTime": "2020-08-31T00:00:00",
+            "useIntelligentBaselining": "true", 
+            "includeDefaultProfile": "true",
+            "autoBaseline": "true", 
+            "minimums": "false", 
+            "detailLevel": "CHARGE_TYPE", 
+            "groupBy": "MONTH", 
+            "fields": "EXT",
+            "tariffInputs": [{
+                "keyName": "providerProfileId",
+                "dataValue": solarProfileId,
+                "operator": "-"
+            },{
+                "keyName": "providerProfileId",
+                "dataValue": storageProfileId,
+                "operator": "+"
+            }]
+        }
+        api_response = self.send_api_request(endpoint_url=endpoint_url, rest_verb="POST", data=api_body)
+        return json.dumps(api_response, indent=4)
 
-# GenabilityInterface = GenabilityApiInterface(app_id=auth["app_id"], app_key=auth["app_key"])
+    # Genability savings analysis on solar only system
+    def analyze_solar(self, providerAccountId, masterTarrifId, customer_class, electricityProfileId, solarProfileId):
+        endpoint_url = f'/v1/accounts/analysis'
+        # Tariffs analyzing the after situation should be time of use
+        # residential = E-TOU-B
+        # commercial = A-10-TOU
+        afterTariffs = {
+            "residential": "3251052",
+            "commercial": "82012"
+        }
+        afterTariff = afterTariffs[customer_class]
+        api_body = {
+            "providerAccountId" : providerAccountId,
+            "fromDateTime" : "2019-01-01",
+            "fields": "ext",
+            "propertyInputs" : [ 
+            {
+                "scenarios" : "before",
+                "keyName" : "masterTariffId",
+                "dataValue" : masterTarrifId
+            },
+            # Tariff for the after scenario is E-TOU-B
+            {
+                "scenarios" : "solar, after",
+                "keyName" : "masterTariffId",
+                "dataValue" : afterTariff
+            },
+            {
+                "scenarios" : "before, after",
+                "keyName" : "rateInflation",
+                "dataValue" : "3.5"
+            }, {
+                "scenarios" : "solar",
+                "keyName" : "rateInflation",
+                "dataValue" : "1.9"
+            }, {
+                "scenarios" : "after, solar",
+                "keyName" : "solarDegradation",
+                "dataValue" : "1.5"
+            }, {
+                "scenarios" : "before, after",
+                "keyName" : "providerProfileId",
+                "dataValue" : electricityProfileId
+            }, {
+                "scenarios" : "after, solar",
+                "keyName" : "providerProfileId",
+                "dataValue" : solarProfileId
+            } ]
+        }
 
-# # TEST CREATE_ACCOUNT PASSED
-# print(GenabilityInterface.create_account(
-#         account_name="Commercial account",
-#         address1="1222 Harrison St",
-#         address2="Apt 6611",
-#         city="San Francisco",
-#         zipcode="94103",
-#         country="US",
-#         customer_class="commercial"
-#     ))
+        api_response = self.send_api_request(endpoint_url=endpoint_url, rest_verb="POST", data=api_body)
+        return json.dumps(api_response, indent=4)
 
-# Residential Account
-# providerAccountId = "4e6d4f43-a94f-478c-8201-12532c653b01"
-# electricityProfileId = "4e6d4f43-a94f-478c-8201-12532c653b01-bills"
-# solarProfileId = "5d7722728161887448ff265d"
-# Commercial Account 
-# providerAccountId = "3204f99c-a8e7-49b9-9658-9fcdd22d0893"
+    # Genability savings analysis on solar plus storage system
+    def analyze_solar_plus_storage(self, providerAccountId, masterTarrifId, customer_class, electricityProfileId, solarProfileId, storageProfileId):
+        endpoint_url = f'/v1/accounts/analysis'
+        # Tariffs analyzing the after situation should be time of use
+        # residential = E-TOU-B
+        # commercial = A-10-TOU
+        afterTariffs = {
+            "residential": "3251052",
+            "commercial": "82012"
+        }
+        afterTariff = afterTariffs[customer_class]
+        api_body = {
+            "providerAccountId" : providerAccountId,
+            "fromDateTime" : "2019-09-01",
+            "fields": "ext",
+            "propertyInputs" : [
+            {
+                "scenarios" : "before",
+                "keyName" : "masterTariffId",
+                "dataValue" : masterTarrifId
+            },
+            # Tariff for the after scenario is E-TOU-B
+            {
+                "scenarios" : "solar, after",
+                "keyName" : "masterTariffId",
+                "dataValue" : afterTariff
+            },
+            {
+                "scenarios" : "before, after",
+                "keyName" : "rateInflation",
+                "dataValue" : "3.5"
+            }, {
+                "scenarios" : "solar",
+                "keyName" : "rateInflation",
+                "dataValue" : "1.9"
+            }, {
+                "scenarios" : "after, solar",
+                "keyName" : "solarDegradation",
+                "dataValue" : "1.5"
+            }, {
+                "scenarios" : "before, after",
+                "keyName" : "providerProfileId",
+                "dataValue" : electricityProfileId
+            }, {
+                "scenarios" : "after, solar",
+                "keyName" : "providerProfileId",
+                "dataValue" : solarProfileId
+            }, {
+                "scenarios" : "after",
+                "keyName" : "providerProfileId",
+                "dataValue" : storageProfileId,
+                "operator": "+"
+            } ]
+        }
 
-# TEST GET_ACCOUNT - PASSED
-# print(GenabilityInterface.get_account(providerAccountId=providerAccountId))
-
-# TEST GET_UTILITIES - PASSED
-# print(GenabilityInterface.get_utilities(zipcode="94103"))
-
-# TEST SET_UTILITY - PASSED
-# print(GenabilityInterface.set_utility(providerAccountId=providerAccountId, lseId=734))
-
-# TEST GET_TARIFFS - PASSED
-# print(GenabilityInterface.get_tariffs(providerAccountId=providerAccountId))
-
-# TEST SET_TARIFF - PASSED
-# print(GenabilityInterface.set_tariff(providerAccountId=providerAccountId, masterTariffId=82009))
-
-# TEST UPDATE_ACCOUNT - PASSED
-# print(GenabilityInterface.update_account(providerAccountId, keyName="customerClass", dataValue="1"))
-
-#  TEST DELETE_ACCOUNT - PASSED
-# print(GenabilityInterface.delete_account(accountId))
-
-# TEST CREATE_ELECTRICITY_PROFILE - PASSED
-# print(GenabilityInterface.create_electricity_profile(providerAccountId=providerAccountId, bill_1="810", bill_2="900", bill_3="780"))
-
-# Test CREATE_SOLAR_PROFILE - PASSED
-# print(GenabilityInterface.create_solar_profile(providerAccountId=providerAccountId, direction="SOUTH", system_size="3"))
-
-# Test GET_ELECTRICITY_PROFILE
-# print(GenabilityInterface.get_electricity_profile(profile_id=electricityProfileId))
-
-# Test GET_SOLAR_PROFILE
-# print(GenabilityInterface.get_solar_profile(profile_id=solarProfileId))
-
-# Test CALCULATE_BASELINE_COSTS - PASSED
-# print(GenabilityInterface.calculate_baseline_costs(providerAccountId=providerAccountId))
-
-# Test RETRIEVE_NET_HOURLY_PROFILE - PASSED
-# print(GenabilityInterface.retrieve_net_hourly_profile(providerAccountId=providerAccountId, solarProfileId=solarProfileId))
+        api_response = self.send_api_request(endpoint_url=endpoint_url, rest_verb="POST", data=api_body)
+        return json.dumps(api_response, indent=4)

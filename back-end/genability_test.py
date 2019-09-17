@@ -1,4 +1,5 @@
 from services.genability import auth, GenabilityApiInterface
+import json
 
 GenabilityInterface = GenabilityApiInterface(auth["app_id"], auth["app_key"])
 
@@ -14,11 +15,12 @@ GenabilityInterface = GenabilityApiInterface(auth["app_id"], auth["app_key"])
 #     ))
 
 # Residential Account
-providerAccountId = "49546fc5-7101-42d6-8ab4-539f855b4918"
-electricityProfileId = "49546fc5-7101-42d6-8ab4-539f855b4918-bills"
-solarProfileId = "49546fc5-7101-42d6-8ab4-539f855b4918-pvwatts"
-genabilitySolarProfileId = "5d7c8e0681618874487006f7"
-# solarProfileId = "5d7722728161887448ff265d"
+providerAccountId = "3be8a7d1-c822-42e5-90a8-6fdcf775241c"
+electricityProfileId = "3be8a7d1-c822-42e5-90a8-6fdcf775241c-bills"
+solarProfileId = "3be8a7d1-c822-42e5-90a8-6fdcf775241c-pvwatts"
+storageProfileId = "3be8a7d1-c822-42e5-90a8-6fdcf775241c-storage"
+masterTariffId = "522"
+
 # Commercial Account 
 # providerAccountId = "3204f99c-a8e7-49b9-9658-9fcdd22d0893"
 
@@ -58,5 +60,20 @@ genabilitySolarProfileId = "5d7c8e0681618874487006f7"
 # Test CALCULATE_BASELINE_COSTS - PASSED
 # print(GenabilityInterface.calculate_baseline_costs(providerAccountId=providerAccountId))
 
-# Test RETRIEVE_NET_HOURLY_PROFILE - PASSED
-# print(GenabilityInterface.retrieve_net_hourly_profile(providerAccountId=providerAccountId, solarProfileId=genabilitySolarProfileId))
+# Test CALCULATE_SOLAR_SAVINGS - PASSED
+# print(GenabilityInterface.calculate_solar_savings(providerAccountId=providerAccountId, solarProfileId=solarProfileId))
+
+# Test CALCULATE_SOLAR_PLUS_SAVINGS - PASSED
+# print(GenabilityInterface.calculate_solar_plus_storage_savings(providerAccountId=providerAccountId, solarProfileId=solarProfileId, storageProfileId=storageProfileId))
+
+# Test ANALYZE_SOLAR - PASSED
+# response = GenabilityInterface.analyze_solar(providerAccountId=providerAccountId, masterTarrifId=masterTariffId, customer_class="residential", electricityProfileId=electricityProfileId, solarProfileId=solarProfileId)
+# data = json.loads(response)
+# pretty_data = json.dumps(data["results"][0]["summary"], indent=4)
+# print(pretty_data)
+
+# Test ANALYZE_SOLAR_PLUS_STORAGE - PASSED
+# response = GenabilityInterface.analyze_solar_plus_storage(providerAccountId=providerAccountId, masterTarrifId=masterTariffId, customer_class="residential", electricityProfileId=electricityProfileId, solarProfileId=solarProfileId, storageProfileId=storageProfileId)
+# data = json.loads(response)
+# pretty_data = json.dumps(data["results"][0]["summary"], indent=4)
+# print(pretty_data)

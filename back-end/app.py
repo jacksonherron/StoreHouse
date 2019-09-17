@@ -6,8 +6,6 @@ from flask_login import LoginManager, current_user, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_cors import CORS
- 
-from services.genability import GenabilityApiInterface, auth
 
 # Init Flask
 app = Flask(__name__)
@@ -29,8 +27,6 @@ marshmallow = Marshmallow(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-# Init Genability API Interface
-GenabilityInterface = GenabilityApiInterface(auth["app_id"], auth["app_key"])
 
 # Custom exception class
 class InvalidUsage(Exception):
@@ -130,32 +126,36 @@ def get_or_delete_user(user_id=None):
 @app.route('/specify/<step>', methods=['POST', 'GET'])
 @login_required
 def create_property(step=None):
+    # Import DB
     from models import Property
+    # Import Genability Interface
+    from services.genability import GenabilityApiInterface, auth
+    GenabilityInterface = GenabilityApiInterface(auth["app_id"], auth["app_key"])
 
     if step is not None:
         if step == "1":
-            # property_name = request.json['property_name']
-            # address_line_1 = request.json['address_line_1']
-            # address_line_2 = request.json['address_line_2']
-            # city = request.json['city']
-            # zipcode = request.json['zipcode']
-            # customer_class = request.json['customer_class']
-            # user_id = request.json['user_id']
-            # ### Create a genability account
-            # new_account = GenabilityInterface.create_account(
-            #     account_name = property_name,
-            #     address1 = address_line_1,
-            #     address2 = address_line_2,
-            #     city = city,
-            #     zipcode = zipcode,
-            #     country="US",
-            #     customer_class=customer_class,
-            # )
-            new_account = GenabilityInterface.get_account(providerAccountId='49546fc5-7101-42d6-8ab4-539f855b4918')
+            property_name = request.json['property_name']
+            address_line_1 = request.json['address_line_1']
+            address_line_2 = request.json['address_line_2']
+            city = request.json['city']
+            zipcode = request.json['zipcode']
+            customer_class = request.json['customer_class']
+            user_id = request.json['user_id']
+            ### Create a genability account
+            new_account = GenabilityInterface.create_account(
+                account_name = property_name,
+                address1 = address_line_1,
+                address2 = address_line_2,
+                city = city,
+                zipcode = zipcode,
+                country="US",
+                customer_class=customer_class,
+            )
+            # new_account = GenabilityInterface.get_account(providerAccountId='49546fc5-7101-42d6-8ab4-539f855b4918')
             account = json.loads(new_account)
             provider_account_id = account["results"][0]["providerAccountId"]
             ### Store account information in the local database
-            # created_property = Property.create_property(property_name, address_line_1, address_line_2, city, zipcode, provider_account_id, user_id)
+            Property.create_property(property_name, address_line_1, address_line_2, city, zipcode, provider_account_id, user_id, customer_class)
             ### Retrieve and return utilities associated with the account
             utilities = GenabilityInterface.get_utilities('94103')
             return ({"provider_account_id": provider_account_id, "utilities": utilities})
@@ -195,6 +195,7 @@ def create_property(step=None):
             solar_system_kw = request.json['solar_system_kw']
             solar_system_dir = request.json['solar_system_dir']
             solar_system_tilt = request.json['solar_system_tilt']
+            # Update Genability and the local db
             response = GenabilityInterface.create_solar_profile(provider_account_id, solar_system_dir, solar_system_kw, solar_system_tilt)
             data = json.loads(response)
             solar_profile_id = data["results"][0]["providerProfileId"]
@@ -202,7 +203,56 @@ def create_property(step=None):
             return response
 
         if step == "6":
-            return
+            # Select the battery system specifications [power (kw), capacity (kWh)
+            storage_specifications = {
+                '1': ['5', '10'],
+                '2': ['5', '13.5'],
+                '3': ['10', '20'],
+                '4': ['10', '27'],
+                '5': ['20', '50'],
+                '6': ['40', '120'],
+                '7': ['60', '240']
+            }
+            provider_account_id = request.json['provider_account_id']
+            storage_system = request.json["storage_system"]
+            storage_power_kw = storage_specifications[storage_system][0]
+            storage_capacity_kwh = storage_specifications[storage_system][1]
+            storage_profile_id = f'{provider_account_id}-storage'
+            edited_property = Property.set_storage_profile(provider_account_id, storage_power_kw, storage_capacity_kwh, storage_profile_id)
+            # Retrieve the electricity 8760 data and create a template for storage data
+            e_response = GenabilityInterface.get_electricity_profile(edited_property.electricity_profile_id)
+            e_data = json.loads(e_response)
+            electricity_profile = []
+            storage_profile = []
+            for hour in e_data["results"][0]["intervals"]["list"]:
+                electricity_profile.append(hour["kWh"]["quantityAmount"])
+                storage_profile.append({ "fromDateTime" : hour["fromDateTime"],
+                    "quantityUnit" : "kWh",
+                    "quantityValue" : '',
+                    "toDateTime" : hour["toDateTime"]
+                })
+            # Retrieve the solar 8760 data
+            s_response = GenabilityInterface.get_solar_profile(edited_property.solar_profile_id)
+            s_data = json.loads(s_response)
+            solar_profile = []
+            for hour in s_data["results"][0]["baselineMeasures"]:
+                solar_profile.append(hour["v"])
+            # Call the OSESMO to return the 8760 data for storage
+            from services.osesmo import main
+            [storage_profile_data, storage_installed_cost, solar_installed_cost] = main(electricity_profile, solar_profile, edited_property.customer_class, float(edited_property.solar_system_kw), float(edited_property.storage_power_kw), float(edited_property.storage_capacity_kwh))
+            # Send the storage profile to Genability
+            for i in range(len(storage_profile)):
+                storage_profile[i]["quantityValue"] = str(-1*storage_profile_data[i])
+            GenabilityInterface.set_storage_profile(storage_profile, provider_account_id, storage_profile_id)
+            # Analyze the savings using Genability analysis endpoint
+            response = GenabilityInterface.analyze_solar_plus_storage(provider_account_id, edited_property.tariff, edited_property.customer_class, edited_property.electricity_profile_id, edited_property.solar_profile_id, edited_property.storage_profile_id )
+            data = json.loads(response)
+            yearly_savings = float(data["results"][0]["summary"]["netAvoidedCost"])
+            monthly_savings = yearly_savings / 12
+            payback_period = (storage_installed_cost + solar_installed_cost) / yearly_savings
+            # Save the reuslts to the local db
+            finished_property = Property.set_savings_profile(provider_account_id, solar_installed_cost, storage_installed_cost, monthly_savings, payback_period)
+            return finished_property
     else:
         from models import Property
         property_name = request.json['property_name']

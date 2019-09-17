@@ -1,19 +1,4 @@
-import json
-with open('./profiles/electricity_profile.json', 'r') as f:
-    electricity_profile = json.load(f)
-with open('./profiles/solar_profile.json', 'r') as f:
-    solar_profile = json.load(f)
-
-hourly_electricity_profile = []
-for hour in electricity_profile["results"][0]["intervals"]["list"]:
-	hourly_electricity_profile.append(hour["kWh"]["quantityAmount"])
-
-# print(hourly_electricity_profile)
-print(len(hourly_electricity_profile))
-
-hourly_solar_profile = []
-for hour in solar_profile["results"][0]["baselineMeasures"]:
-    hourly_solar_profile.append(hour["v"])
-
-# print(hourly_solar_profile)
-print(len(hourly_solar_profile))
+def main(electricity_profile_input, solar_profile_input, customer_class_input, solar_system_kw_input, storage_power_kw_input, storage_capacity_kwh_input):
+    from services.OSESMO import OSESMO_IO
+    storage_profile = OSESMO_IO.main(electricity_profile_input, solar_profile_input, customer_class_input, solar_system_kw_input, storage_power_kw_input, storage_capacity_kwh_input)
+    return list(storage_profile)
