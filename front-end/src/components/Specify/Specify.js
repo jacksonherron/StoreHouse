@@ -27,11 +27,11 @@ class Specify extends Component {
         month_2_usage: '',
         month_3_usage: '',
         electricity_profile_id: '',
-        solar_system_kw: '0.3',
+        solar_system_kw: '',
         solar_system_dir: 'SOUTH',
-        solar_system_tilt: '15',
+        solar_system_tilt: '20',
         solar_profile_id: '',
-        battery_system: '1',
+        battery_system: '0',
         provider_account_id: '',
         errors: [],
         stage: 1,
@@ -85,11 +85,16 @@ class Specify extends Component {
                     }
                     const response_data = JSON.parse(res.data.utilities)
                     const utilities = response_data.results
+                    let solar_size_default = 0.6
+                    if (this.state.customer_class === 'commercial'){
+                        solar_size_default = 3;
+                    };
                     this.setState({
                         stage: this.state.stage + 1,
                         provider_account_id: res.data.provider_account_id,
                         utility: utilities[0].lseId,
                         utilities: utilities,
+                        solar_system_kw: solar_size_default,
                         errors: []
                     });
                 })
@@ -202,7 +207,6 @@ class Specify extends Component {
                 { withCredentials: true }
                 )
                 .then((res) => {
-                    console.log(res.data.results[0]["providerProfileId"])
                     if (res.data.status === "400"){
                         this.setState({
                             errors: ["The request failed. Please try again."],

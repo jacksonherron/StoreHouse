@@ -15,6 +15,7 @@ const Stage5 = ({ handleChange, handleSubmit5, customer_class, solar_system_kw, 
                     <option value="3">10</option>
                     {customer_class === 'commercial' && <option value="6">20</option>}
                     {customer_class === 'commercial' && <option value="12">40</option>}
+                    {customer_class === 'commercial' && <option value="18">60</option>}
                     {customer_class === 'commercial' && <option value="24">80</option>}
                     {customer_class === 'commercial' && <option value="30">100</option>}
                 </Form.Control>

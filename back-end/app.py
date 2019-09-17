@@ -122,7 +122,6 @@ def get_or_delete_user(user_id=None):
         raise InvalidUsage('Something went wrong please try again.')
     return confirmation
 
-@app.route('/specify', methods=['POST'])
 @app.route('/specify/<step>', methods=['POST', 'GET'])
 @login_required
 def create_property(step=None):
@@ -205,6 +204,7 @@ def create_property(step=None):
         if step == "6":
             # Select the battery system specifications [power (kw), capacity (kWh)
             storage_specifications = {
+                '0': ['No storage', 'No storage'],
                 '1': ['5', '10'],
                 '2': ['5', '13.5'],
                 '3': ['10', '20'],
@@ -239,13 +239,27 @@ def create_property(step=None):
                 solar_profile.append(hour["v"])
             # Call the OSESMO to return the 8760 data for storage
             from services.osesmo import main
-            [storage_profile_data, storage_installed_cost, solar_installed_cost] = main(electricity_profile, solar_profile, edited_property.customer_class, float(edited_property.solar_system_kw), float(edited_property.storage_power_kw), float(edited_property.storage_capacity_kwh))
-            # Send the storage profile to Genability
-            for i in range(len(storage_profile)):
-                storage_profile[i]["quantityValue"] = str(-1*storage_profile_data[i])
-            GenabilityInterface.set_storage_profile(storage_profile, provider_account_id, storage_profile_id)
-            # Analyze the savings using Genability analysis endpoint
-            response = GenabilityInterface.analyze_solar_plus_storage(provider_account_id, edited_property.tariff, edited_property.customer_class, edited_property.electricity_profile_id, edited_property.solar_profile_id, edited_property.storage_profile_id )
+            if storage_system != '0':
+                # Solar plus storage
+                [storage_profile_data, storage_installed_cost, solar_installed_cost] = main(electricity_profile, solar_profile, edited_property.customer_class, float(edited_property.solar_system_kw), float(edited_property.storage_power_kw), float(edited_property.storage_capacity_kwh))
+                # Send the storage profile to Genability
+                for i in range(len(storage_profile)):
+                    storage_profile[i]["quantityValue"] = str(-1*storage_profile_data[i])
+                GenabilityInterface.set_storage_profile(storage_profile, provider_account_id, storage_profile_id)
+                # Analyze the solar plus torage savings using Genability analysis endpoint
+                response = GenabilityInterface.analyze_solar_plus_storage(provider_account_id, edited_property.tariff, edited_property.customer_class, edited_property.electricity_profile_id, edited_property.solar_profile_id, edited_property.storage_profile_id )
+            else:
+                # Solar only
+                customer_class_dict = {
+                    "residential": "Residential",
+                    "commercial": "Commercial and Industrial"
+                }
+                customer_class = customer_class_dict[edited_property.customer_class]
+                from services.OSESMO.Solar_Installed_Cost_per_kW_Calculator import Solar_Installed_Cost_per_kW_Calculator
+                storage_installed_cost = 0.0
+                solar_installed_cost = Solar_Installed_Cost_per_kW_Calculator(customer_class, float(edited_property.solar_system_kw))
+                # Analyze the solar savings using Genability analysis endpoint
+                response = GenabilityInterface.analyze_solar(provider_account_id, edited_property.tariff, edited_property.customer_class, edited_property.electricity_profile_id, edited_property.solar_profile_id)
             data = json.loads(response)
             yearly_savings = float(data["results"][0]["summary"]["netAvoidedCost"])
             monthly_savings = yearly_savings / 12
@@ -253,26 +267,6 @@ def create_property(step=None):
             # Save the reuslts to the local db
             finished_property = Property.set_savings_profile(provider_account_id, solar_installed_cost, storage_installed_cost, monthly_savings, payback_period)
             return finished_property
-    else:
-        from models import Property
-        property_name = request.json['property_name']
-        address_line_1 = request.json['address_line_1']
-        address_line_2 = request.json['address_line_2']
-        city = request.json['city']
-        zipcode = request.json['zipcode']
-        utility = request.json['utility']
-        tariff = request.json['tariff']
-        month_1_usage = request.json['month_1_usage']
-        month_2_usage = request.json['month_2_usage']
-        month_3_usage = request.json['month_3_usage']
-        solar_system_kw = request.json['solar_system_kw']
-        solar_system_dir = request.json['solar_system_dir']
-        solar_system_tilt = request.json['solar_system_tilt']
-        battery_system = request.json['battery_system']
-        monthly_savings = request.json['monthly_savings']
-        payback_period = request.json['payback_period']
-        user_id = request.json['user_id']
-        return Property.create_property(property_name, address_line_1, address_line_2, city, zipcode, utility, tariff, month_1_usage, month_2_usage, month_3_usage, solar_system_kw, solar_system_dir, solar_system_tilt, battery_system, monthly_savings, payback_period, user_id)
 
 @app.route('/property', methods=['GET'])
 @app.route('/property/<property_id>', methods=['GET'])
