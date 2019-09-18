@@ -25,9 +25,9 @@ const Stage1 = ({ handleChange, handleSubmit1, property_name, address_line_1, ad
                 <label htmlFor="zipcode">Zip Code*</label>
                 <input type="text" id="zipcode" name="zipcode" value={zipcode} onChange={handleChange} className="form-control form-control-lg" />
             </div>
-            <div className="form-group customer-class">
-                <label htmlFor="customer-class">Customer Class*</label>
-                <Form.Control name="customer-class" value={customer_class} onChange={handleChange} as="select" className="form-control form-control-lg">
+            <div className="form-group customer_class">
+                <label htmlFor="customer_class">Customer Class*</label>
+                <Form.Control name="customer_class" value={customer_class} onChange={handleChange} as="select" className="form-control form-control-lg">
                     <option value="residential" >Residential</option>
                     <option value="commercial" >Commercial</option>
                 </Form.Control>

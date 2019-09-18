@@ -11,7 +11,7 @@ const Navigation = ({ location, currentUser, setCurrentUser, showLogin, showSign
     return (
         <Navbar bg="light" expand="sm">
             <Nav.Item className="storehouse">
-                <Link to='/' className="nav-link storehouse">StoreHouse <i className="fas fa-home nav-home"></i></Link>
+                <Link to='/' className="nav-link storehouse">StoreHouse <i className="fas fa-home nav-home"></i><i className="fas fa-sun nav-sun"></i></Link>
             </Nav.Item>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
@@ -19,7 +19,7 @@ const Navigation = ({ location, currentUser, setCurrentUser, showLogin, showSign
                     {currentUser ? 
                         <>
                             <Nav.Item>
-                                <Link to="/home" className="nav-link">Home</Link>
+                                <Link to="/home" className="nav-link">Account</Link>
                             </Nav.Item>
                             <Nav.Item onClick={handleLogout} >Logout</Nav.Item>
                         </> :

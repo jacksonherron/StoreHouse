@@ -26,7 +26,7 @@ label {
     width: 180px;
 }
 
-.customer-class select {
+.customer_class select {
     width: 300px;
 }
 
@@ -42,7 +42,7 @@ label {
     width: 300px;
 }
 
-.solar select {
+.solar-form select {
     width: 300px;
 }
 
@@ -55,6 +55,11 @@ label {
     margin-bottom: 1rem;
 }
 
+.submit {
+    background-color: #61BCF9!important;
+    border-color: #61BCF9!important;
+    margin: 0.5rem;
+}
 
 @media only screen and (max-width: 600px) {
     .specify {

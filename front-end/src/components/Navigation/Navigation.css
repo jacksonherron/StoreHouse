@@ -17,6 +17,7 @@
 .storehouse {
     justify-self: flex-start;
     align-self: flex-start;
+    position: relative;
 }
 
 .authLink {
@@ -36,4 +37,15 @@
 
 .nav-link:hover .nav-home {
     color: #61BCF9!important;
+}
+
+.nav-link:hover .nav-sun {
+    color: #FFE556!important;
+}
+
+.nav-sun {
+    font-size: 0.8rem;
+    position: absolute;
+    top: 0.25rem;
+    right: -0.5rem;
 }

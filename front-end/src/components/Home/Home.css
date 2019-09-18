@@ -6,7 +6,7 @@
     justify-content: flex-start;
     flex-grow: 2;
     box-sizing: border-box;
-    max-width: 100%;
+    width: 100%;
 }
 
 .deleteAccount {
@@ -40,7 +40,8 @@
 }
  
 .properties {
-    margin-top: 2rem
+    width: 100%;
+    margin-top: 2rem;
 }
 
 .welcome {
@@ -59,7 +60,8 @@
     font-size: 2.6rem;
     padding-left: 1rem;
 }
-.properties, .newProperty {
+
+.newProperty p {
     max-width: 800px;
 }
 
@@ -120,6 +122,12 @@
 @media only screen and (max-width: 600px) {
     .homePage {
         padding: 4rem 2rem 1rem 2rem;
+    }
+
+    .properties-container {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
     }
 
     .welcome {

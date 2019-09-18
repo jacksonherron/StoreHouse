@@ -22,7 +22,7 @@ const Stage6 = ({ handleChange, handleSubmit6, submit6, customer_class, battery_
                 </Form.Control>
             </div>
             <div className="required">(* indicates required)</div>
-            <Button id="submit" variant="primary" onClick={handleSubmit6}>Submit</Button>
+            <Button id="submit" className="submit" onClick={handleSubmit6}>Submit</Button>
         </>
     );
 };

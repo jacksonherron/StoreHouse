@@ -4,3 +4,11 @@ footer {
     margin-bottom: 1rem;
     justify-self: flex-end;
 }
+
+footer * {
+    color: rgba(0, 0, 0, 0.7)
+}
+
+.githubLink:hover {
+    color: rgba(0, 0, 0, 0.7)
+}

@@ -112,7 +112,7 @@ class Property extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="disclaimer">Disclaimer: Costs and savings presented are only estimations, and do not include factors such as investment tax credits or adjustments to your tariff that may be required after installing solar and storage technologies.</div>
+                <div className="disclaimer">Disclaimer: Costs and savings presented are only estimations, and do not include factors such as investment tax credits or adjustments to your tariff that may be required after installing solar and storage technologies. Storage may decrease savings over installing solar alone, particularly for residential customers. Whether or not to install storage depends on other factors such as the desire to withstand blackouts and future utility rates that may disincentivize solar-alone systems.</div>
                 <div className="buttons">
                     <Button variant="secondary"  onClick={this.handleShowModal} >Delete</Button>
                     <Button className="back" onClick={ () => this.props.history.goBack() }>Go Back</Button>

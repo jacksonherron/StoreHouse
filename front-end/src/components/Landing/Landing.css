@@ -4,6 +4,7 @@
     justify-content: center;
     align-items: center;
     padding: 15px;
+    width: 100%;
 }
 
 .brand {
@@ -16,7 +17,12 @@
 h1 {
     font-size: 5rem;
     margin: 0;
-    color: rgba(0, 0, 0, 0.75)
+    color: rgba(0, 0, 0, 0.8)
+}
+
+h3 {
+    text-align: center;
+    color: rgba(0, 0, 0, 0.6)
 }
 
 .brand .fa-home {
@@ -25,7 +31,7 @@ h1 {
     margin: 1.5rem 0.2rem 0.5rem 1rem;
 }
 
-.fa-sun {
+.brand .fa-sun {
     color: #FFEB26;
     font-size: 3.5rem;
     align-self: flex-start;
@@ -39,7 +45,12 @@ h1 {
 }
 
 .titleInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     position: relative;
+    min-height: 45vh;
+    padding-bottom: 2rem;
 }
 
 .titleInfo::after {
@@ -51,9 +62,41 @@ h1 {
     right: -3rem;
 }
 
+.auth-buttons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.features {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+}
+
+.feature {
+    margin: 4rem 2rem;
+    width: 30vw
+
+}
+
 @media only screen and (max-width: 600px) {
     h1 {
         font-size: 3rem
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    .titleInfo {
+        padding: 0;
+    }
+
+    .titleInfo::after {
+        display: none;
     }
 
     .brand .fa-home {
@@ -61,7 +104,11 @@ h1 {
         margin: 1.5rem 0.2rem 0.5rem 1rem;
     }
     
-    .fa-sun {
+    .titleInfo {
+        min-height: 30vh;
+    }
+
+    .brand .fa-sun {
         color: #FFE556;
         font-size: 1.7rem;
         align-self: flex-start;
@@ -69,6 +116,18 @@ h1 {
 
     .slogan {
         font-size: 1rem;
+    }
+
+    .features {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .feature {
+        width: 90vw;
+        margin: 0;
+        margin-top: 2rem;
     }
     
 }
