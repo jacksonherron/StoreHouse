@@ -82,6 +82,12 @@ h3 {
 
 }
 
+.safari {
+    font-size: 0.8rem;
+    color: rgba(0, 0, 0, 0.3);
+    padding: 0 1rem 1rem 1rem;
+}
+
 @media only screen and (max-width: 600px) {
     h1 {
         font-size: 3rem

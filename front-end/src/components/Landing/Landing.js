@@ -32,6 +32,7 @@ const Landing = ({ currentUser, handleShowLogin, handleShowSignup }) => {
                     <h3>Participate in decarbonizing the grid of the future</h3>
                 </div>
             </div>
+            <div className="safari">Please note, if accessing this site through Safari you must disable 'prevent cross-site tracking' in your security preferences. Don't forget to enable it again when you leave!</div>
         </div>
     )
 }
