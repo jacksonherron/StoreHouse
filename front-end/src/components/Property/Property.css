@@ -1,5 +1,5 @@
 .propertyContainer {
-    padding: 4rem 0 2rem 0;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -16,30 +16,63 @@
     color: rgba(0, 0, 0, 0.8)
 }
 
+.propertyContainer h1 {
+    margin-bottom: 0.5rem;
+}
+
+.title {
+    text-align: center;
+    padding: 1.5rem;
+}
+
 .propertyTitle {
     font-size: 3rem;
 }
 
-.analysis::before {
-    border: 2px solid rgba(0, 0, 0, 0.6);
-    width: 100%;
-}
-
 .analysis {
+    position: relative;
     margin-top: 1rem;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
+.analysis::before {
+    content: '';
+    position: absolute;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.analysis::after {
+    content: '';
+    position: absolute;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
 .specifications {
+    position: relative;
     margin-top: 1rem;
-    width: 100%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
 }
+
+.specifications::after {
+    content: '';
+    position: absolute;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
 
 h4 {
     margin: 1rem 0;
@@ -60,7 +93,7 @@ h4 {
 }
 
 .address_utility, .solar, .storage {
-    padding: 0.5rem 2rem;
+    padding: 1.5rem
 }
 
 .address_utility > h6, .solar > h6, .storage > h6 {
@@ -83,10 +116,15 @@ h4 {
     justify-content: space-between
 }
 
-.go-back {
+.buttons * {
+    color: white;
+    margin: 0.5rem;
+    margin-top: 2rem;
+}
+
+.back {
     background-color: #61BCF9!important;
     border-color: #61BCF9!important;
-    margin-top: 2rem;
     color: white;
 }
 

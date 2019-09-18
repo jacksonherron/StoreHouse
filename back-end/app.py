@@ -271,7 +271,7 @@ def create_property(step=None):
             return finished_property
 
 @app.route('/property', methods=['GET'])
-@app.route('/property/<property_id>', methods=['GET'])
+@app.route('/property/<property_id>', methods=['GET', 'DELETE'])
 @login_required
 def get_property(property_id=None):
     from models import Property
@@ -280,6 +280,8 @@ def get_property(property_id=None):
         if user_id == None:
             return Property.get_properties()
         return Property.get_user_properties(user_id)
+    if request.method == 'DELETE':
+        return Property.delete_property(property_id)
     return Property.get_property(property_id)
 
 

@@ -1,21 +1,39 @@
+.navbar {
+    display: flex;
+}
+
+.navbar * {
+    font-size: 1.4rem;
+    color: rgba(0, 0, 0, 0.7)!important;
+    padding: 0 0.3rem;
+}
+
 .navbar-collapse {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
 }
 
-.navbar-nav {
-    margin-right: 0!important;
+.storehouse {
+    justify-self: flex-start;
+    align-self: flex-start;
 }
 
-.navbar-nav * {
-    font-size: 1.4rem;
-    color: rgba(0, 0, 0, 0.7)!important;
-    padding: 0 0.3rem;
+.authLink {
+    cursor: pointer;
 }
 
-.navLink:hover{
-    text-decoration: none;
+.nav-item:hover{
     color: #61BCF9!important;
     cursor: pointer;
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    color: #61BCF9!important;
+    cursor: pointer;
+}
+
+.nav-link:hover .nav-home {
+    color: #61BCF9!important;
 }

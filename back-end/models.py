@@ -247,6 +247,17 @@ class Property(db.Model):
         found_property = Property.query.filter_by(provider_account_id=provider_account_id).first()
         return property_schema.jsonify(found_property)
 
+    @classmethod
+    def delete_property(cls, provider_account_id):
+        found_property = Property.query.filter_by(provider_account_id=provider_account_id).first()
+        try:
+            db.session.delete(found_property)
+            db.session.commit()
+        except:
+            db.session.rollback()
+            raise
+        return {"status": 200, "message": "Property succesfully deleted"}
+
     
 class PropertySchema(marshmallow.Schema):
     class Meta:

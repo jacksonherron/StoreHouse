@@ -5,25 +5,29 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Login from '../auth/Login';
 import Signup from '../auth/Signup';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 
 const Navigation = ({ location, currentUser, setCurrentUser, showLogin, showSignup, handleLogout, handleShowLogin, handleShowSignup }) => {
     return (
         <Navbar bg="light" expand="sm">
+            <Nav.Item className="storehouse">
+                <Link to='/' className="nav-link storehouse">StoreHouse <i className="fas fa-home nav-home"></i></Link>
+            </Nav.Item>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="mr-auto">
-                    <Link to='/' className="navLink">About</Link>
+                <Nav>
                     {currentUser ? 
                         <>
-                            {<Link to="/home" className="navLink">Home</Link> }
-                            <li onClick={handleLogout} className="navLink">Logout</li>
+                            <Nav.Item>
+                                <Link to="/home" className="nav-link">Home</Link>
+                            </Nav.Item>
+                            <Nav.Item onClick={handleLogout} >Logout</Nav.Item>
                         </> :
                         <>
-                            <li className="navLink" onClick={handleShowLogin} >Log In</li>
+                            <Nav.Item onClick={handleShowLogin} >Log In</Nav.Item>
                             <Login showLogin={showLogin} handleShowLogin={handleShowLogin} setCurrentUser={setCurrentUser} />
-                            <li className="navLink" onClick={handleShowSignup}>Sign Up</li>
-                            <Signup showSignup={showSignup} handleShowSignup={handleShowSignup} setCurrentUser={setCurrentUser} />
+                            <Nav.Item className="authLink" onClick={handleShowSignup}>Sign Up</Nav.Item>
+                            <Signup handleShowSignup={handleShowSignup} setCurrentUser={setCurrentUser} />
                         </>
                     }
                 </Nav>

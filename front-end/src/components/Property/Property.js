@@ -3,17 +3,19 @@ import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import './Property.css';
 import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import Alert from 'react-bootstrap/Alert';
 import API_URL from '../../constants';
 
 
 class Property extends Component {
     state = {
-        property: {},
-        errors: []
+        showModal: false,
+        property: {}
     }
 
     componentDidMount = () => {
-        const { property_id } = this.props.match.params
+        const { property_id } = this.props.match.params;
         axios.get(
             `${API_URL}/property/${property_id}`,
             { withCredentials: true }
@@ -24,14 +26,34 @@ class Property extends Component {
         .catch((err) => console.log(err.response))
     }
 
+    handleDeleteProperty = () => {
+        const { property_id } = this.props.match.params;
+        axios.delete(
+            `${API_URL}/property/${property_id}`,
+            { withCredentials: true }
+        )
+        .then((res) => {
+            this.props.history.push('/home')
+        })
+        .catch((err) => console.log(err.response))
+    }
+
+    handleShowModal = () => {
+        if (this.state.showModal) {
+            return this.setState({ showModal: false })
+        }
+        this.setState({ showModal: true })
+    }
 
 
     render() {
         const date = new Date(this.state.property.timestamp)
         return (
             <div className="propertyContainer">
-                <h1 className="propertyTitle">{this.state.property.property_name}</h1>
-                <div>Specified on: {date.toLocaleString()}</div>
+                <div className="title">
+                    <h1 className="propertyTitle">{this.state.property.property_name}</h1>
+                    <div>Specified on: {date.toLocaleString()}</div>
+                </div>
                 <div className="analysis">
                     <div className="monthlySavings">
                         <h2>$<span className="savings">{this.state.property.monthly_savings && this.state.property.monthly_savings.toFixed(2)}</span>/month</h2>
@@ -91,9 +113,27 @@ class Property extends Component {
                     </div>
                 </div>
                 <div className="disclaimer">Disclaimer: Costs and savings presented are only estimations, and do not include factors such as investment tax credits or adjustments to your tariff that may be required after installing solar and storage technologies.</div>
-                <Button className="go-back" onClick={ () => this.props.history.goBack() }>
-                    Go Back
-                </Button>
+                <div className="buttons">
+                    <Button variant="secondary"  onClick={this.handleShowModal} >Delete</Button>
+                    <Button className="back" onClick={ () => this.props.history.goBack() }>Go Back</Button>
+                </div>
+                
+                <Modal show={this.state.showModal} onHide={this.handleShowModal}>
+                    <Modal.Header>
+                        <Modal.Title>Delete Property</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Alert variant="danger">Are you sure you want to permanently delete this property?</Alert>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="danger" onClick={this.handleDeleteProperty}>
+                            Delete
+                        </Button>
+                        <Button variant="secondary" onClick={this.handleShowModal}>
+                            Cancel
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
         )
     }
