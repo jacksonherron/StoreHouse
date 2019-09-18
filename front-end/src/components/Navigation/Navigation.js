@@ -7,7 +7,7 @@ import Login from '../auth/Login';
 import Signup from '../auth/Signup';
 import { Link } from 'react-router-dom'
 
-const Navigation = ({ location, currentUser, setCurrentUser, showLogin, showSignup, handleLogout, handleShowLogin, handleShowSignup }) => {
+const Navigation = ({ currentUser, setCurrentUser, showLogin, showSignup, handleLogout, handleShowLogin, handleShowSignup }) => {
     return (
         <Navbar bg="light" expand="sm">
             <Nav.Item className="storehouse">
@@ -24,10 +24,10 @@ const Navigation = ({ location, currentUser, setCurrentUser, showLogin, showSign
                             <Nav.Item onClick={handleLogout} >Logout</Nav.Item>
                         </> :
                         <>
-                            <Nav.Item onClick={handleShowLogin} >Log In</Nav.Item>
+                            <Nav.Item className="authLink" onClick={handleShowLogin} >Log In</Nav.Item>
                             <Login showLogin={showLogin} handleShowLogin={handleShowLogin} setCurrentUser={setCurrentUser} />
                             <Nav.Item className="authLink" onClick={handleShowSignup}>Sign Up</Nav.Item>
-                            <Signup handleShowSignup={handleShowSignup} setCurrentUser={setCurrentUser} />
+                            <Signup showSignup={showSignup}  handleShowSignup={handleShowSignup} setCurrentUser={setCurrentUser} />
                         </>
                     }
                 </Nav>
