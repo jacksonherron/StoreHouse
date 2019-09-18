@@ -104,7 +104,9 @@ class Property(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     customer_class = db.Column(db.String(100), nullable=False)
     utility = db.Column(db.String(300), nullable=True)
+    utility_name = db.Column(db.String(300), nullable=True)
     tariff = db.Column(db.String(100), nullable=True)
+    tariff_name = db.Column(db.String(300), nullable=True)
     month_1_usage = db.Column(db.String(100), nullable=True)
     month_2_usage = db.Column(db.String(100), nullable=True)
     month_3_usage = db.Column(db.String(100), nullable=True)
@@ -145,9 +147,10 @@ class Property(db.Model):
         return property_schema.jsonify(new_property)
     
     @classmethod
-    def set_utility(cls, provider_account_id, value):
+    def set_utility(cls, provider_account_id, utility_id, utility_name):
         found_property = Property.query.filter_by(provider_account_id=provider_account_id).first()
-        found_property.utility = value
+        found_property.utility = utility_id
+        found_property.utility_name = utility_name
         try: 
             db.session.add(found_property)
             db.session.commit()
@@ -157,9 +160,10 @@ class Property(db.Model):
         return property_schema.jsonify(found_property)
 
     @classmethod
-    def set_tariff(cls, provider_account_id, value):
+    def set_tariff(cls, provider_account_id, tariff_id, tariff_name):
         found_property = Property.query.filter_by(provider_account_id=provider_account_id).first()
-        found_property.tariff = value
+        found_property.tariff = tariff_id
+        found_property.tariff_name = tariff_name
         try: 
             db.session.add(found_property)
             db.session.commit()
@@ -239,14 +243,14 @@ class Property(db.Model):
         return properties_schema.jsonify(found_properties)
 
     @classmethod
-    def get_property(cls, property_id):
-        found_property = Property.query.get(property_id)
+    def get_property(cls, provider_account_id):
+        found_property = Property.query.filter_by(provider_account_id=provider_account_id).first()
         return property_schema.jsonify(found_property)
 
     
 class PropertySchema(marshmallow.Schema):
     class Meta:
-        fields = ('property_name', 'address_line_1', 'address_line_2', 'city', 'zipcode', 'provider_account_id', 'user_id', 'customer_class', 'utility', 'tariff', 'month_1_usage', 'month_2_usage', 'month_3_usage', 'electricity_profile_id', 'solar_system_kw', 'solar_system_dir', 'solar_system_tilt', 'solar_profile_id', 'storage_capacity_kwh', 'storage_power_kw', 'storage_profile_id', 'solar_system_cost', 'storage_system_cost', 'monthly_savings', 'payback_period', 'timestamp')
+        fields = ('property_name', 'address_line_1', 'address_line_2', 'city', 'zipcode', 'provider_account_id', 'user_id', 'customer_class', 'utility', 'utility_name', 'tariff', 'tariff_name', 'month_1_usage', 'month_2_usage', 'month_3_usage', 'electricity_profile_id', 'solar_system_kw', 'solar_system_dir', 'solar_system_tilt', 'solar_profile_id', 'storage_capacity_kwh', 'storage_power_kw', 'storage_profile_id', 'solar_system_cost', 'storage_system_cost', 'monthly_savings', 'payback_period', 'is_complete', 'timestamp')
 
 property_schema = PropertySchema()
 properties_schema = PropertySchema(many=True)

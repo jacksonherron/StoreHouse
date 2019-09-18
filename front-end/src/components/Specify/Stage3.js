@@ -6,17 +6,18 @@ const Stage3 = ({ handleChange, handleSubmit3, tariffs, tariff }) => {
     let options = []
     
     tariffs.forEach((t, i) => {
-        options.push(<option key={i} value={t.masterTariffId}>{t.tariffCode}</option>)
+        options.push(<option key={i} value={i}>{t.tariffCode}</option>)
     })
 
     return(
         <>
             <div className="form-group tariff">
-                <label htmlFor="tariff">Tariff</label>
+                <label htmlFor="tariff">Tariff*</label>
                 <Form.Control name="tariff" value={tariff} onChange={handleChange} as="select" className="form-control form-control-lg">
                     {options}
                 </Form.Control>
             </div>
+            <div className="required">(* indicates required)</div>
             <Button id="next" variant="secondary" onClick={handleSubmit3}>Next</Button>
         </>
     );

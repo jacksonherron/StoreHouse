@@ -13,8 +13,7 @@ const Navigation = ({ location, currentUser, setCurrentUser, showLogin, showSign
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                    <Link to='/' className="navLink">Main</Link>
-                    <Link to='/about' className="navLink">About</Link>
+                    <Link to='/' className="navLink">About</Link>
                     {currentUser ? 
                         <>
                             {<Link to="/home" className="navLink">Home</Link> }

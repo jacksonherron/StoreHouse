@@ -156,15 +156,16 @@ def create_property(step=None):
             ### Store account information in the local database
             Property.create_property(property_name, address_line_1, address_line_2, city, zipcode, provider_account_id, user_id, customer_class)
             ### Retrieve and return utilities associated with the account
-            utilities = GenabilityInterface.get_utilities('94103')
+            utilities = GenabilityInterface.get_utilities(zipcode)
             return ({"provider_account_id": provider_account_id, "utilities": utilities})
 
         if step == "2":
             provider_account_id = request.json['provider_account_id']
             lseId = request.json['lseId']
+            utility_name = request.json['utility_name']
             ### UpdateGenability and the local db
             GenabilityInterface.set_utility(providerAccountId=provider_account_id, lseId=lseId)
-            Property.set_utility(provider_account_id=provider_account_id, value=lseId)
+            Property.set_utility(provider_account_id=provider_account_id, utility_id=lseId, utility_name=utility_name)
             ### Retrieve and return tariffs associated with the account
             tariffs = GenabilityInterface.get_tariffs(providerAccountId=provider_account_id)
             return tariffs
@@ -172,9 +173,10 @@ def create_property(step=None):
         if step == "3":
             provider_account_id = request.json['provider_account_id']
             master_tariff_id = request.json['master_tariff_id']
+            tariff_name = request.json['tariff_name']
             ### Update Genability and the local db
             response = GenabilityInterface.set_tariff(providerAccountId=provider_account_id, masterTariffId=master_tariff_id)
-            Property.set_tariff(provider_account_id=provider_account_id, value=master_tariff_id)
+            Property.set_tariff(provider_account_id=provider_account_id, tariff_id=master_tariff_id, tariff_name=tariff_name)
             return response
 
         if step == "4":
@@ -247,7 +249,7 @@ def create_property(step=None):
                     storage_profile[i]["quantityValue"] = str(-1*storage_profile_data[i])
                 GenabilityInterface.set_storage_profile(storage_profile, provider_account_id, storage_profile_id)
                 # Analyze the solar plus torage savings using Genability analysis endpoint
-                response = GenabilityInterface.analyze_solar_plus_storage(provider_account_id, edited_property.tariff, edited_property.customer_class, edited_property.electricity_profile_id, edited_property.solar_profile_id, edited_property.storage_profile_id )
+                response = GenabilityInterface.analyze_solar_plus_storage(provider_account_id, edited_property.tariff, edited_property.electricity_profile_id, edited_property.solar_profile_id, edited_property.storage_profile_id )
             else:
                 # Solar only
                 customer_class_dict = {
@@ -259,7 +261,7 @@ def create_property(step=None):
                 storage_installed_cost = 0.0
                 solar_installed_cost = Solar_Installed_Cost_per_kW_Calculator(customer_class, float(edited_property.solar_system_kw))
                 # Analyze the solar savings using Genability analysis endpoint
-                response = GenabilityInterface.analyze_solar(provider_account_id, edited_property.tariff, edited_property.customer_class, edited_property.electricity_profile_id, edited_property.solar_profile_id)
+                response = GenabilityInterface.analyze_solar(provider_account_id, edited_property.tariff, edited_property.electricity_profile_id, edited_property.solar_profile_id)
             data = json.loads(response)
             yearly_savings = float(data["results"][0]["summary"]["netAvoidedCost"])
             monthly_savings = yearly_savings / 12

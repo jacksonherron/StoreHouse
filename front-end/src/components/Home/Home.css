@@ -66,12 +66,17 @@
 .card-body {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.viewDetail {
-    align-self: center;
+.estimate {
+    font-size: 1.5rem;
+    font-weight: bold
+}
+
+.card-body * {
+    text-align: center;
 }
 
 .properties h2 {
@@ -93,6 +98,16 @@
 
 .begin:hover, .viewDetail:hover {
     cursor: pointer;
+}
+
+.address {
+    padding-top: 0.5rem;
+    font-size: 0.8rem!important;
+    font-weight: normal!important;
+}
+
+.estimate {
+    
 }
 
 @media only screen and (max-width: 600px) {
@@ -126,7 +141,7 @@
     }
     
     .newProperty {
-        margin-top: 2rem;
+        margin-top: 0;
     }
 
     .newProperty h2 {

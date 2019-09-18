@@ -1,0 +1,120 @@
+.propertyContainer {
+    padding: 4rem 0 2rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    box-sizing: border-box;
+    min-width: 100%;
+}
+
+.propertyContainer * {
+    color: rgba(0, 0, 0, 0.6)
+}
+
+.propertyContainer h1, .propertyContainer h2, .propertyContainer h6 {
+    color: rgba(0, 0, 0, 0.8)
+}
+
+.propertyTitle {
+    font-size: 3rem;
+}
+
+.analysis::before {
+    border: 2px solid rgba(0, 0, 0, 0.6);
+    width: 100%;
+}
+
+.analysis {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.specifications {
+    margin-top: 1rem;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+h4 {
+    margin: 1rem 0;
+}
+
+.analysis > div {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.savings, .period {
+    color: #61BCF9;
+    font-size: 4rem;
+}
+
+.specifications > div {
+    width: 20rem;
+}
+
+.address_utility, .solar, .storage {
+    padding: 0.5rem 2rem;
+}
+
+.address_utility > h6, .solar > h6, .storage > h6 {
+    text-align: center;
+}
+
+.specGroup {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between
+}
+
+.addressInfo {
+    text-align: end;
+}
+
+.solarDetails, .storageDetails {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between
+}
+
+.go-back {
+    background-color: #61BCF9!important;
+    border-color: #61BCF9!important;
+    margin-top: 2rem;
+    color: white;
+}
+
+.disclaimer {
+    margin-top: 1.5rem;
+    font-size: 0.5rem;
+    max-width: 60vw;
+    text-align: center;
+}
+
+@media only screen and (max-width: 600px) {
+    .homePage {
+        padding: 4rem 2rem 1rem 2rem;
+    }
+
+    .analysis {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .specifications {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .disclaimer{
+        max-width: 80vw;
+    }
+}

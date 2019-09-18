@@ -10,7 +10,7 @@ const Landing = ({ currentUser, handleShowLogin, handleShowSignup }) => {
                 <i className="fas fa-home"></i>
                 <i className="fas fa-sun"></i>
             </div>
-            <p className="slogan">Fast, simple solar and storage cost savings calculator for California property owners</p>
+            <p className="slogan">Fast, simple solar and storage cost savings calculator for property owners</p>
             { !currentUser && <div className='auth-buttons'>
             <Button onClick={handleShowLogin} className="modalOpen">
                 Login

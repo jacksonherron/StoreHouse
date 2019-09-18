@@ -6,7 +6,7 @@ const Stage5 = ({ handleChange, handleSubmit5, customer_class, solar_system_kw, 
     return(
         <>
             <div className="form-group solar">
-                <label htmlFor="solar_system_kw">Number of panels</label>
+                <label htmlFor="solar_system_kw">Number of panels*</label>
                 <Form.Control name="solar_system_kw" value={solar_system_kw} onChange={handleChange} as="select" className="form-control form-control-lg">
                     {customer_class === 'residential' && <option value="0.6">2</option>}
                     {customer_class === 'residential' && <option value="1.2">4</option>}
@@ -21,7 +21,7 @@ const Stage5 = ({ handleChange, handleSubmit5, customer_class, solar_system_kw, 
                 </Form.Control>
             </div>
             <div className="form-group solar">
-                <label htmlFor="solar_system_dir">Direction facing</label>
+                <label htmlFor="solar_system_dir">Direction facing*</label>
                 <Form.Control name="solar_system_dir" value={solar_system_dir} onChange={handleChange} as="select" className="form-control form-control-lg">
                     <option value="SOUTH">South</option>
                     <option value="EAST">East</option>
@@ -29,7 +29,7 @@ const Stage5 = ({ handleChange, handleSubmit5, customer_class, solar_system_kw, 
                 </Form.Control>
             </div>
             <div className="form-group solar">
-                <label htmlFor="solar_system_tilt">Tilt (&deg;)</label>
+                <label htmlFor="solar_system_tilt">Tilt (&deg;)*</label>
                 <Form.Control name="solar_system_tilt" value={solar_system_tilt} onChange={handleChange} as="select" className="form-control form-control-lg">
                     <option value="20">20</option>
                     <option value="25">25</option>
@@ -38,6 +38,7 @@ const Stage5 = ({ handleChange, handleSubmit5, customer_class, solar_system_kw, 
                     <option value="40">40</option>
                 </Form.Control>
             </div>
+            <div className="required">(* indicates required)</div>
             <Button id="next" variant="secondary" onClick={handleSubmit5}>Next</Button>
         </>
     );

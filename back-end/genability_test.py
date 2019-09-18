@@ -15,11 +15,11 @@ GenabilityInterface = GenabilityApiInterface(auth["app_id"], auth["app_key"])
 #     ))
 
 # Residential Account
-providerAccountId = "3be8a7d1-c822-42e5-90a8-6fdcf775241c"
-electricityProfileId = "3be8a7d1-c822-42e5-90a8-6fdcf775241c-bills"
-solarProfileId = "3be8a7d1-c822-42e5-90a8-6fdcf775241c-pvwatts"
-storageProfileId = "3be8a7d1-c822-42e5-90a8-6fdcf775241c-storage"
-masterTariffId = "522"
+# providerAccountId = "3be8a7d1-c822-42e5-90a8-6fdcf775241c"
+# electricityProfileId = "3be8a7d1-c822-42e5-90a8-6fdcf775241c-bills"
+# solarProfileId = "3be8a7d1-c822-42e5-90a8-6fdcf775241c-pvwatts"
+# storageProfileId = "3be8a7d1-c822-42e5-90a8-6fdcf775241c-storage"
+# masterTariffId = "522"
 
 # Commercial Account 
 # providerAccountId = "3204f99c-a8e7-49b9-9658-9fcdd22d0893"
@@ -67,13 +67,13 @@ masterTariffId = "522"
 # print(GenabilityInterface.calculate_solar_plus_storage_savings(providerAccountId=providerAccountId, solarProfileId=solarProfileId, storageProfileId=storageProfileId))
 
 # Test ANALYZE_SOLAR - PASSED
-# response = GenabilityInterface.analyze_solar(providerAccountId=providerAccountId, masterTarrifId=masterTariffId, customer_class="residential", electricityProfileId=electricityProfileId, solarProfileId=solarProfileId)
+# response = GenabilityInterface.analyze_solar(providerAccountId=providerAccountId, masterTarrifId=masterTariffId, electricityProfileId=electricityProfileId, solarProfileId=solarProfileId)
 # data = json.loads(response)
 # pretty_data = json.dumps(data["results"][0]["summary"], indent=4)
 # print(pretty_data)
 
 # Test ANALYZE_SOLAR_PLUS_STORAGE - PASSED
-# response = GenabilityInterface.analyze_solar_plus_storage(providerAccountId=providerAccountId, masterTarrifId=masterTariffId, customer_class="residential", electricityProfileId=electricityProfileId, solarProfileId=solarProfileId, storageProfileId=storageProfileId)
+# response = GenabilityInterface.analyze_solar_plus_storage(providerAccountId=providerAccountId, masterTarrifId=masterTariffId, electricityProfileId=electricityProfileId, solarProfileId=solarProfileId, storageProfileId=storageProfileId)
 # data = json.loads(response)
 # pretty_data = json.dumps(data["results"][0]["summary"], indent=4)
 # print(pretty_data)

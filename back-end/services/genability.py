@@ -339,31 +339,17 @@ class GenabilityApiInterface():
         return json.dumps(api_response, indent=4)
 
     # Genability savings analysis on solar only system
-    def analyze_solar(self, providerAccountId, masterTarrifId, customer_class, electricityProfileId, solarProfileId):
+    def analyze_solar(self, providerAccountId, masterTarrifId, electricityProfileId, solarProfileId):
         endpoint_url = f'/v1/accounts/analysis'
-        # Tariffs analyzing the after situation should be time of use
-        # residential = E-TOU-B
-        # commercial = A-10-TOU
-        afterTariffs = {
-            "residential": "3251052",
-            "commercial": "82012"
-        }
-        afterTariff = afterTariffs[customer_class]
         api_body = {
             "providerAccountId" : providerAccountId,
             "fromDateTime" : "2019-01-01",
             "fields": "ext",
             "propertyInputs" : [ 
             {
-                "scenarios" : "before",
+                "scenarios" : "before, solar, after",
                 "keyName" : "masterTariffId",
                 "dataValue" : masterTarrifId
-            },
-            # Tariff for the after scenario is E-TOU-B
-            {
-                "scenarios" : "solar, after",
-                "keyName" : "masterTariffId",
-                "dataValue" : afterTariff
             },
             {
                 "scenarios" : "before, after",
@@ -392,31 +378,20 @@ class GenabilityApiInterface():
         return json.dumps(api_response, indent=4)
 
     # Genability savings analysis on solar plus storage system
-    def analyze_solar_plus_storage(self, providerAccountId, masterTarrifId, customer_class, electricityProfileId, solarProfileId, storageProfileId):
+    def analyze_solar_plus_storage(self, providerAccountId, masterTarrifId, electricityProfileId, solarProfileId, storageProfileId):
         endpoint_url = f'/v1/accounts/analysis'
         # Tariffs analyzing the after situation should be time of use
         # residential = E-TOU-B
         # commercial = A-10-TOU
-        afterTariffs = {
-            "residential": "3251052",
-            "commercial": "82012"
-        }
-        afterTariff = afterTariffs[customer_class]
         api_body = {
             "providerAccountId" : providerAccountId,
             "fromDateTime" : "2019-09-01",
             "fields": "ext",
             "propertyInputs" : [
             {
-                "scenarios" : "before",
+                "scenarios" : "before, solar, after",
                 "keyName" : "masterTariffId",
                 "dataValue" : masterTarrifId
-            },
-            # Tariff for the after scenario is E-TOU-B
-            {
-                "scenarios" : "solar, after",
-                "keyName" : "masterTariffId",
-                "dataValue" : afterTariff
             },
             {
                 "scenarios" : "before, after",

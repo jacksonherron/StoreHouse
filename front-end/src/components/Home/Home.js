@@ -32,7 +32,8 @@ class Home extends Component {
             }
         )
         .then((res) => {
-            this.setState({properties: res.data});
+            let completedProperties = res.data.filter(property => property.is_complete === true)
+            this.setState({properties: completedProperties});
         })
         .catch((err) => console.log(err.response))
     }
@@ -67,12 +68,18 @@ class Home extends Component {
                             this.state.properties.map((property, i) => (
                                 <Card key={i} className="property">
                                     <Card.Body>
-                                    <Card.Title>{property.property_name}</Card.Title>
+                                    <Card.Title>
+                                        {property.property_name}
+                                        <div className="address">
+                                            {property.address_line_1}<br/>
+                                            {property.city}<br/>
+                                        </div>
+                                    </Card.Title>
                                     <Card.Text>
-                                        {property.city}<br/>
-                                        {property.zipcode}<br/>
+                                        Savings estimate:<br/>
+                                        $<span className="estimate">{property.monthly_savings.toFixed(2)}</span>/month
                                     </Card.Text>
-                                    <Button className="viewDetail">View detail</Button>
+                                    <Link to={`property/${property.provider_account_id}`} params={{ property_id: property.provider_account_id }}><Button className="viewDetail">View detail</Button></Link>
                                     </Card.Body>
                                 </Card>
                             )) :

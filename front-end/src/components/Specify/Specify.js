@@ -20,8 +20,8 @@ class Specify extends Component {
         zipcode: '',
         customer_class: 'residential',
         utilities: [],
-        utility: '',
-        tariff: '',
+        utility: 0,
+        tariff: 0,
         tariffs: [],
         month_1_usage: '',
         month_2_usage: '',
@@ -92,7 +92,6 @@ class Specify extends Component {
                     this.setState({
                         stage: this.state.stage + 1,
                         provider_account_id: res.data.provider_account_id,
-                        utility: utilities[0].lseId,
                         utilities: utilities,
                         solar_system_kw: solar_size_default,
                         errors: []
@@ -105,9 +104,11 @@ class Specify extends Component {
     handleSubmit2 = () => {
         if (this.state.submit2 === false){
             this.setState({submit2: true})
+            const utility = this.state.utilities[this.state.utility]
             const data = {
                 provider_account_id: this.state.provider_account_id,
-                lseId: this.state.utility
+                lseId: utility.lseId,
+                utility_name: utility.name
             }
             axios.post(
                 `${API_URL}/specify/2`, 
@@ -123,7 +124,6 @@ class Specify extends Component {
                     }
                     this.setState({
                         stage: this.state.stage + 1,
-                        tariff: res.data[0].masterTariffId,
                         tariffs: res.data,
                         errors: []
                     });
@@ -135,9 +135,11 @@ class Specify extends Component {
     handleSubmit3 = () => {
         if (this.state.submit3 === false){
             this.setState({submit3: true})
+            const tariff = this.state.tariffs[this.state.tariff]
             const data = {
                 provider_account_id: this.state.provider_account_id,
-                master_tariff_id: this.state.tariff
+                master_tariff_id: tariff.masterTariffId,
+                tariff_name: tariff.tariffCode
             }
             axios.post(
                 `${API_URL}/specify/3`, 

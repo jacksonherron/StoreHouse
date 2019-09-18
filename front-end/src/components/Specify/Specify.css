@@ -14,12 +14,20 @@ form {
     align-items: flex-start;
 }
 
+label {
+    font-size: 0.8rem;
+}
+
 .address input {
     width: 300px
 }
 
-.zip input {
+.zipcode input {
     width: 180px;
+}
+
+.customer-class select {
+    width: 300px;
 }
 
 .utility select {
@@ -42,9 +50,9 @@ form {
     width: 300px;
 }
 
-
-.submit {
-    align-self: center
+.required {
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
 }
 
 
