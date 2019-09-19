@@ -14,7 +14,7 @@ https://storehouse-app.herokuapp.com
 - PostgreSQL
 - OSESMO (Open Source Energy Storage Optimization Model) https://github.com/RyanCMann/OSESMO
 - PVWatts (Solar PV calculator) https://pvwatts.nrel.gov
-- Genability Switch API (Utility/tariff information and cost-savings calculator) https://www.genability.com/switch/
+- Genability Switch (Utility/tariff information and cost-savings calculator) https://www.genability.com/switch/
 
 ###### Frontend
 - React
