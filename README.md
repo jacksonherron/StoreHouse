@@ -24,6 +24,7 @@ https://storehouse-app.herokuapp.com
 ### Room for Improvement
 
 - Add front-end form validation to authorization and property specification.
+- More robust error handling.
 - Allow users to edit properties and receive the updated analysis.
 - Display graphical information of hourly solar production, battery operation, and electricity load for a customer property over the course of a typical day.
 - Refactor to use Flask-JWT for authentication so the app stops running into problems with browsers (e.g. Safari, Chrome on iOS) blocking cross-site authentication cookies from the API server.
