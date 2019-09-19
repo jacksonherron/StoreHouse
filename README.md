@@ -68,7 +68,7 @@ User proceeds through the onboarding process:
 
 ![Landing Page](./assets/Landing.png)
 
-###### Onboarding
+###### Specification
 
 ![Cost Walkthrough 1/3](./assets/Cost_Tool_1.png)
 
