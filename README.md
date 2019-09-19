@@ -11,7 +11,7 @@ https://storehouse-app.herokuapp.com
 ###### Backend
 - Python
 - Flask
-- Postgres
+- PostgreSQL
 - OSESMO (Open Source Energy Storage Optimization Model) https://github.com/RyanCMann/OSESMO
 - Genability Switch API https://www.genability.com/switch/
 
