@@ -33,6 +33,9 @@ https://storehouse-app.herokuapp.com
 
 ---
 
+## Planning materials
+
+
 ### User Description
 
 Home and business owners in California that are interested in understanding the cost/benefits of installing clean tech on their property(ies).
@@ -54,10 +57,6 @@ User proceeds through the onboarding process:
 - Confirm submit
 
 5. User is presented with the results of cost savings/per month, as well as the simple payback period of the system.
-
----
-
-## Planning materials
 
 ### Entity Relationship Diagram
 
