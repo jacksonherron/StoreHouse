@@ -53,15 +53,15 @@ User proceeds through the onboarding process:
 - Select storage system
 - Confirm submit
 
-4. User is presented with the results of cost savings/per month, as well as the simple payback period of the system.
+5. User is presented with the results of cost savings/per month, as well as the simple payback period of the system.
 
 ---
+
+## Planning materials
 
 ### Entity Relationship Diagram
 
 ![Entity Relationship Diagram](./assets/ERD.png)
-
----
 
 ### Wireframes
 
