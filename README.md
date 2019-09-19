@@ -20,6 +20,7 @@ https://storehouse-app.herokuapp.com
 - React
 - React-Bootstrap
 - Axios
+- CSS
 
 ### Room for Improvement
 
