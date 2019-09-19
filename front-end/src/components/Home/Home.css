@@ -63,6 +63,11 @@
 
 .newProperty p {
     max-width: 800px;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.noProps {
+    color: rgba(0, 0, 0, 0.6);
 }
 
 .card-body {
@@ -98,10 +103,6 @@
     margin-top: 1.5rem
 }
 
-.newProperty p {
-    color: rgba(0, 0, 0, 0.6);
-}
-
 .begin, .viewDetail {
     background-color: #61BCF9!important;
     border-color: #61BCF9!important;
@@ -118,6 +119,8 @@
     font-size: 0.8rem!important;
     font-weight: normal!important;
 }
+
+
 
 @media only screen and (max-width: 600px) {
     .homePage {

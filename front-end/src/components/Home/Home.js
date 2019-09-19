@@ -83,7 +83,7 @@ class Home extends Component {
                                     </Card.Body>
                                 </Card>
                             )) :
-                            <div>You haven't added any properties yet...</div>
+                            <div className="noProps">You haven't added any properties yet...</div>
                         }
                     </div>
                 </div>

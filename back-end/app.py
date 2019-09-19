@@ -13,13 +13,13 @@ app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
 # Configure Database
-# basedir = os.path.abspath(os.path.dirname(__file__))
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'db.StoreHouse')
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'db.StoreHouse')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = "thisismydeepestdarkestsecret"
 
 # Configure heroku environment variables
-heroku = Heroku(app)
+# heroku = Heroku(app)
 
 # Init Database
 db = SQLAlchemy(app)
