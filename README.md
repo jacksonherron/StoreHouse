@@ -29,7 +29,7 @@ https://storehouse-app.herokuapp.com
 - Display graphical information of hourly solar production, battery operation, and electricity load for a customer property over the course of a typical day.
 - Refactor to use Flask-JWT for authentication so the app stops running into problems with browsers (e.g. Safari, Chrome on iOS) blocking cross-site authentication cookies from the API server.
 - Integrate the customer tariff information from Genability with OSESMO to optimize battery usage based on the customer's actual tariff instead of a generic one.
-- Update the tariff used in the cost-savings calculation. Currently this is the same as is specified by the user, but in most cases customers are not eligible to use the same tariff after installing solar and storage. This will allowing users to select the post solar/storage tariff or automating this identification.
+- Update the tariff used in the cost-savings calculation. Currently this is the same as is specified by the user, but in most cases customers are not eligible to use the same tariff after installing solar and storage. This will involve allowing users to select their post solar/storage tariff or automating this process.
 
 ---
 
