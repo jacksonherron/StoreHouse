@@ -6,6 +6,14 @@ A full stack application for property owners to assess potential savings from in
 
 https://storehouse-app.herokuapp.com
 
+### Screenshots
+
+![Landing Page](./assets/Landing%20Page)
+
+![Home Page](./assets/Home%20Page)
+
+![Property View](./assets/Property%20View)
+
 ### Technologies Used
 
 ###### Backend
