@@ -8,11 +8,11 @@ https://storehouse-app.herokuapp.com
 
 ### Screenshots
 
-![Landing Page](./assets/Landing%20Page)
+![Landing Page](./assets/Landing_Page.png)
 
-![Home Page](./assets/Home%20Page)
+![Home Page](./assets/Home_Page.png)
 
-![Property View](./assets/Property%20View)
+![Property View](./assets/Property_View.png)
 
 ### Technologies Used
 
