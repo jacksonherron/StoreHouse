@@ -8,9 +8,15 @@ https://storehouse-app.herokuapp.com
 
 ### Screenshots
 
+###### Landing Page
+
 ![Landing Page](./assets/Landing_Page.png)
 
+###### Home Page
+
 ![Home Page](./assets/Home_Page.png)
+
+###### Property View
 
 ![Property View](./assets/Property_View.png)
 
