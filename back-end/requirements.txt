@@ -9,7 +9,7 @@ cryptography==2.7
 cvxopt==1.2.3
 cycler==0.10.0
 Flask==1.1.1
-Flask-Cors==3.0.8
+Flask-Cors==3.0.9
 flask-heroku==0.1.9
 Flask-JWT==0.3.2
 Flask-Login==0.4.1
